@@ -4,59 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cotapata - Guía de Bolsillo</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #235030; --secondary: #88ab75; --accent: #f39c12; 
-            --bg: #f0f7f4; --text: #2c3e50; --card-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            --primary: #235030;
+            --secondary: #88ab75; 
+            --accent: #f39c12; 
+            --bg: #f0f7f4;
+            --text: #2c3e50;
+            --card-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
 
-        /* --- INICIO Y VIDEO --- */
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: white; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .img-portada { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; }
-        #btn-comenzar { position: absolute; top: 65%; left: 50%; transform: translateX(-50%); z-index: 2; background: var(--accent); color: white; border: none; padding: 15px 35px; border-radius: 30px; font-size: 1.2rem; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.3); cursor: pointer; white-space: nowrap; }
-        #intro-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 3; display: none; background-color: black; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 0; overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* --- HEADER Y MENÚ --- */
-        header { background: var(--primary); color: white; padding: 15px; text-align: center; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; }
+        /* --- 1. PANTALLA DE VIDEO (ENTRADA DIRECTA) --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: black; z-index: 9999;
+        }
+        #intro-video {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* --- 2. HEADER Y MENÚ --- */
+        header {
+            background: var(--primary); color: white; padding: 15px; text-align: center;
+            border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+        }
         header h1 { margin: 0; font-size: 1.3rem; }
-        .menu-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
-        .menu-btn { background-color: white; color: var(--primary); border: none; padding: 12px 5px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; box-shadow: var(--card-shadow); cursor: pointer; text-transform: uppercase; }
+
+        .menu-container {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            padding: 15px; max-width: 600px; margin: 0 auto;
+        }
+        .menu-btn {
+            background-color: white; color: var(--primary); border: none;
+            padding: 12px 5px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+            box-shadow: var(--card-shadow); cursor: pointer; text-transform: uppercase;
+        }
         .menu-btn.active { background-color: var(--primary); color: white; }
 
-        /* --- FILTROS --- */
+        /* --- 3. FILTROS --- */
         #fauna-tools { max-width: 600px; margin: 0 auto; padding: 0 15px 15px 15px; }
         .filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; justify-content: center; }
-        .pill-btn { background-color: #e5f2eb; color: var(--primary); border: none; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
+        .pill-btn {
+            background-color: #e5f2eb; color: var(--primary); border: none;
+            padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+            white-space: nowrap; cursor: pointer;
+        }
         .pill-btn.active { background-color: var(--accent); color: white; }
 
-        /* --- TARJETAS --- */
+        /* --- 4. GRID DE TARJETAS --- */
         .content-section { display: none; padding: 15px; }
         .content-section.active { display: block; }
-        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1200px; margin: 0 auto; }
-        .mini-card { background: white; padding: 10px; border-radius: 15px; text-align: center; box-shadow: var(--card-shadow); cursor: pointer; border: 1px solid #ddd; }
+        .grid-container {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .mini-card {
+            background: white; padding: 10px; border-radius: 15px; text-align: center;
+            box-shadow: var(--card-shadow); cursor: pointer; border: 1px solid #ddd;
+        }
         .img-container { width: 100%; height: 110px; border-radius: 10px; overflow: hidden; background-color: #eee; }
         .mini-card img { width: 100%; height: 100%; object-fit: cover; }
         .mini-card h3 { font-size: 0.85rem; margin: 10px 0 2px; color: var(--primary); font-weight: 700; line-height: 1.2; }
 
-        /* --- MODAL --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 1000; justify-content: center; align-items: flex-end; background-size: cover; background-position: center; }
+        /* --- 5. MODAL (FONDO ELEGANTE) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; z-index: 1000;
+            justify-content: center; align-items: flex-end;
+            background-size: cover; background-position: center;
+        }
         .modal-overlay.active { display: flex; }
-        .info-box { background-color: white; width: 100%; padding: 25px 20px; border-top-left-radius: 25px; border-top-right-radius: 25px; max-height: 80vh; overflow-y: auto; position: relative; }
-        .btn-cerrar { position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; font-size: 1.2rem; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        .info-box {
+            background-color: white; width: 100%; padding: 25px 20px;
+            border-top-left-radius: 25px; border-top-right-radius: 25px;
+            max-height: 80vh; overflow-y: auto; position: relative;
+        }
+        .btn-cerrar {
+            position: absolute; top: 15px; right: 15px; background: #e74c3c;
+            color: white; border: none; font-size: 1.2rem; width: 35px; height: 35px;
+            border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+
         .info-box h2 { font-size: 1.3rem; margin: 0 0 5px; color: var(--primary); padding-right: 30px;}
         .info-box h3 { font-size: 0.9rem; margin: 0 0 15px; font-style: italic; color: #666; }
         .info-box p { font-size: 0.9rem; line-height: 1.5; color: #333; margin-bottom: 15px; }
 
-        /* --- AUDIO --- */
-        .audio-container { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; background-color: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
+        /* --- 6. AUDIO --- */
+        .audio-container {
+            display: flex; flex-direction: column; gap: 10px; margin: 15px 0;
+            background-color: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee;
+        }
         .audio-row { display: flex; gap: 10px; }
-        .btn-audio { background-color: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; font-size: 0.85rem; }
+        .btn-audio {
+            background-color: var(--secondary); color: white; border: none; padding: 12px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; font-size: 0.85rem;
+        }
         .btn-pause { background-color: #e74c3c; flex: 0.3; font-size: 1.2rem; } 
         .btn-sound { background-color: var(--accent); }
 
-        /* --- ACORDEONES --- */
+        /* --- 7. ACORDEONES GUÍA --- */
         .accordion-item { background: white; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
         .accordion-header { padding: 15px; color: var(--primary); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; }
         .accordion-content { padding: 0 15px; display: none; color: #444; font-size: 0.9rem; line-height: 1.5; }
@@ -66,10 +121,8 @@
 </head>
 <body>
 
-    <div id="splash-screen">
-        <img src="oso_portada.png" alt="Oso de Bienvenida" class="img-portada" id="img-portada">
-        <button id="btn-comenzar" onclick="iniciarAventura()">🚀 Comenzar Aventura</button>
-        <video id="intro-video" preload="auto" playsinline>
+    <div id="splash-screen" onclick="saltarVideo()">
+        <video id="intro-video" autoplay muted playsinline>
             <source src="Video.mp4" type="video/mp4">
         </video>
     </div>
@@ -131,6 +184,7 @@
             <button class="btn-cerrar" onclick="cerrarModal()">×</button>
             <h2 id="modal-titulo">Nombre</h2>
             <h3 id="modal-cientifico">Científico</h3>
+            
             <div class="audio-container">
                 <div class="audio-row">
                     <button class="btn-audio" onclick="reproducirTTS()">🔊 Escuchar Guía</button>
@@ -141,6 +195,7 @@
                     <button class="btn-audio btn-pause" onclick="pausarSonidoAnimal()">■</button>
                 </div>
             </div>
+
             <div id="modal-descripcion"></div>
         </div>
     </div>
@@ -148,24 +203,14 @@
     <audio id="audio-animal" preload="none"></audio>
 
     <script>
-        // --- 1. LÓGICA DE VIDEO CON SONIDO ---
+        // --- LÓGICA DE VIDEO AUTOPLAY Y SALTO ---
         var videoIntro = document.getElementById('intro-video');
         var splashScreen = document.getElementById('splash-screen');
         var saltoRealizado = 0;
 
-        function iniciarAventura() {
-            document.getElementById('btn-comenzar').style.display = 'none';
-            document.getElementById('img-portada').style.display = 'none';
-            videoIntro.style.display = 'block';
-            
-            videoIntro.play().catch(function(e) {
-                saltarVideo();
-            });
-
-            splashScreen.onclick = function() { saltarVideo(); };
-        }
-
-        videoIntro.onended = function() { saltarVideo(); };
+        videoIntro.onended = function() {
+            saltarVideo();
+        };
 
         function saltarVideo() {
             if (saltoRealizado === 0) {
@@ -175,79 +220,97 @@
             }
         }
 
-        // --- 2. BASE DE DATOS COMPLETA ---
+        // --- BASE DE DATOS EXACTA PROPORCIONADA ---
         const baseDatosFauna = [
-            { nombre: "OSO ANDINO / JUCUMARI", cientifico: "Tremarctos ornatus", img: "oso-frontino-2-1.jpg", desc: "Habita en los bosques nublados de Cotapata y es vital para la dispersión de semillas grandes.<br><br><strong>Dato Curioso:</strong> Es el único oso nativo de Sudamérica. Las manchas claras en su rostro y pecho son únicas en cada individuo.", categoria: "mamifero", sonido: "Sonido Oso jukumari.mp3" },
-            { nombre: "PUMA", cientifico: "Puma concolor", img: "large (1).jpg", desc: "Gran felino solitario que se adapta tanto a las zonas altas como a la selva baja del parque.<br><br><strong>Dato Curioso:</strong> Tiene el mayor rango de distribución de cualquier mamífero terrestre en América. No puede rugir, pero sí ronronea.", categoria: "mamifero", sonido: "Sonido Puma.mp3" },
-            { nombre: "MARIMONO", cientifico: "Ateles chamek", img: "ceb06c81-e99b-40fe-8863-b6e7bd666501.jpg", desc: "Primate de hábitos arborícolas que habita en el dosel de los bosques húmedos.<br><br><strong>Dato Curioso:</strong> Carecen de pulgares en sus manos, una adaptación evolutiva para balancearse a gran velocidad entre las ramas.", categoria: "mamifero", sonido: "Sonido Marimono.mp3" },
-            { nombre: "TARUCA / VENADO ANDINO", cientifico: "Hippocamelus antisensis", img: "Diseno-sin-titulo-29.jpg", desc: "Ciervo corpulento que vive en grupos familiares en las escarpadas zonas altoandinas.<br><br><strong>Dato Curioso:</strong> Sus pezuñas están anatómicamente adaptadas para trepar y saltar sobre rocas resbaladizas sin perder el equilibrio.", categoria: "mamifero", sonido: "Sonido Siervos.mp3" },
-            { nombre: "CHANCHO DE MONTE", cientifico: "Pecari tajacu", img: "chancho de monte 04.jpeg", desc: "Mamífero social que viaja en manadas buscando raíces y frutos caídos en el bosque.<br><br><strong>Dato Curioso:</strong> Tienen una glándula en la parte inferior de la espalda que segrega un olor almizclado muy fuerte.", categoria: "mamifero", sonido: "Sonido Cancho de monte.mp3" },
-            { nombre: "PACARANA", cientifico: "Dinomys branickii", img: "pacarana__dinomys_branickii__no_zoologico_do_parque_ambiental_chico_mendes__rio_branco__.jpg", desc: "Roedor corpulento de movimientos lentos y pelaje marrón con rayas y manchas blancas.<br><br><strong>Dato Curioso:</strong> Es uno de los roedores más grandes del mundo y el único representante vivo de una antigua familia de gigantes.", categoria: "roedor", sonido: "Sonido Pacarana.mp3" },
-            { nombre: "JOCHI COLORADO", cientifico: "Dasyprocta punctata", img: "507178952_9357785367656840_7279397495556188778_n.jpg", desc: "Roedor diurno muy ágil que habita en el sotobosque, alimentándose de semillas y nueces.<br><br><strong>Dato Curioso:</strong> Tiene la costumbre de enterrar semillas para comerlas después, pero suele olvidarlas, convirtiéndose en el mejor reforestador.", categoria: "roedor", sonido: "Sonido Jochi colorado.mp3" },
-            { nombre: "MURCIÉLAGO HEMATÓFAGO", cientifico: "Desmodus rotundus", img: "muercielago.jpg", desc: "Murciélago que se alimenta exclusivamente de la sangre de mamíferos o aves.<br><br><strong>Dato Curioso:</strong> Su saliva contiene una proteína anticoagulante llamada 'draculina' que evita que la herida se cierre.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
-            { nombre: "MURCIÉLAGO FRUGÍVORO", cientifico: "Phyllostomus hastatus", img: "large.jpg", desc: "Murciélago de gran tamaño esencial para la regeneración de la flora mediante la dispersión de semillas.<br><br><strong>Dato Curioso:</strong> Tienen un sistema de comunicación complejo; cada familia tiene su propio dialecto.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
-            { nombre: "TITI", cientifico: "Saguinus spp.", img: "Portadas-Amazonas-MOno-TITI-LOW.jpg", desc: "Pequeños primates diurnos muy activos que se desplazan velozmente por la selva.<br><br><strong>Dato Curioso:</strong> Las hembras casi siempre dan a luz gemelos, y son los machos quienes asumen la mayor parte del cuidado.", categoria: "mamifero", sonido: "Sonido Mono Titi.mp3" },
-            { nombre: "GATO DE PAJONAL", cientifico: "Leopardus tigrinus", img: "WhatsApp Image 2026-03-04 at 11.27.04.jpeg", desc: "Pequeños felinos silvestres sumamente esquivos que habitan en zonas de gran altitud y rocosas.<br><br><strong>Dato Curioso:</strong> El gato andino es considerado el fantasma de los Andes. Su larga cola le sirve como timón.", categoria: "mamifero", sonido: "Sonido Gato pajonal.mp3" },
-            { nombre: "ZORRO ANDINO", cientifico: "Lycalopex culpaeus", img: "f28cba57-f446-4556-b2ae-5c264a530a9d.jpg", desc: "Cánido adaptable que regula las poblaciones de roedores en las zonas montañosas.<br><br><strong>Dato Curioso:</strong> A pesar de llamarse zorro, genéticamente pertenece a un grupo sudamericano más emparentado con los lobos.", categoria: "mamifero", sonido: "Sonido Zorro.mp3" },
-            { nombre: "TUNQUI / GALLITO DE LAS ROCAS", cientifico: "Rupicola peruvianus", img: "TUNKI.jpg", desc: "Ave emblemática de los Yungas. Los machos poseen un plumaje rojo-anaranjado sumamente brillante.<br><br><strong>Dato Curioso:</strong> Los machos se reúnen en grupos llamados leks para hacer coreografías y emitir chasquidos extraños.", categoria: "ave", sonido: "Sonido Tunki.mp3" },
-            { nombre: "CÓNDOR ANDINO", cientifico: "Vultur gryphus", img: "8d81c823-abdf-4c04-83fa-002611abb02f.jpg", desc: "Ave carroñera masiva que habita en las cumbres más altas de Cotapata.<br><br><strong>Dato Curioso:</strong> Puede planear cientos de kilómetros aprovechando las corrientes de aire térmicas sin tener que batir sus alas.", categoria: "ave", sonido: "Sonido Condor.mp3" },
-            { nombre: "GUÁCHARO", cientifico: "Steatornis caripensis", img: "483359_10150947721041695_493434887_n.jpg", desc: "Habita en cuevas oscuras y sale de noche a buscar alimento en los árboles frutales.<br><br><strong>Dato Curioso:</strong> Es la única ave nocturna del mundo que se alimenta de frutas y utiliza la ecolocalización para navegar.", categoria: "ave", sonido: "Sonido Guácharo.mp3" },
-            { nombre: "ÁGUILA NEGRA Y CASTAÑA", cientifico: "Spizaetus isidori", img: "aguilla negra.jpg", desc: "Poderoso depredador aéreo de los bosques nublados, clave para el equilibrio del ecosistema.<br><br><strong>Dato Curioso:</strong> Las crías nacen con plumaje blanco y tardan hasta 4 años en obtener el característico color negro y castaño.", categoria: "ave", sonido: "Sonido Aguila negra y castaña.mp3" },
-            { nombre: "PAVA ANDINA", cientifico: "Penelope montagnii", img: "900.jpg", desc: "Ave de mediano tamaño que camina por las gruesas ramas de los árboles buscando bayas y hojas.<br><br><strong>Dato Curioso:</strong> En lugar de cantar para marcar territorio, los machos a menudo tamborean ruidosamente con sus alas.", categoria: "ave", sonido: "Sonido Pava andina.mp3" },
-            { nombre: "PAVA ALA DE HOZ", cientifico: "Chamaepetes goudotii", img: "sickle_winged_guan-1.jpg", desc: "Suele moverse sigilosamente entre el espeso follaje de los estratos medios del bosque.<br><br><strong>Dato Curioso:</strong> Sus alas tienen plumas modificadas con forma de hoz que producen un fuerte silbido vibratorio.", categoria: "ave", sonido: "Sonido Pavo ala de hoz.mp3" },
-            { nombre: "COLIBRÍ BOLIVIANO", cientifico: "Aglaeactis pamela", img: "WhatsApp Image 2026-03-04 at 11.23.32.jpeg", desc: "Pequeña ave de vuelo extremadamente rápido y preciso, vital para la polinización.<br><br><strong>Dato Curioso:</strong> Es una especie estrictamente endémica de Bolivia, no existe silvestre en ninguna otra parte.", categoria: "ave", sonido: "Sonido Colibri de sol boliviano.mp3" },
-            { nombre: "REMOLINERA REAL", cientifico: "Cinclodes aricomae", img: "WhatsApp Image 2026-03-04 at 11.26.34.jpeg", desc: "Ave pequeña adaptada a los rigores de la puna, buscando insectos entre los troncos descascarados.<br><br><strong>Dato Curioso:</strong> Está en peligro crítico de extinción porque su supervivencia depende de los bosques de queñua.", categoria: "ave", sonido: "Sonido Remolina real.mp3" }
+            { id: 1, nombre: "OSO ANDINO / JUCUMARI", cientifico: "Tremarctos ornatus", img: "oso-frontino-2-1.jpg", desc: "Habita en los bosques nublados de Cotapata y es vital para la dispersión de semillas grandes.<br><br><strong>Dato Curioso:</strong> Es el único oso nativo de Sudamérica. Las manchas claras en su rostro y pecho son únicas en cada individuo.", categoria: "mamifero", sonido: "Sonido Oso jukumari.mp3" },
+            { id: 2, nombre: "PUMA", cientifico: "Puma concolor", img: "large (1).jpg", desc: "Gran felino solitario que se adapta tanto a las zonas altas como a la selva baja del parque.<br><br><strong>Dato Curioso:</strong> Tiene el mayor rango de distribución de cualquier mamífero terrestre en América. No puede rugir, pero sí ronronea.", categoria: "mamifero", sonido: "Sonido Puma.mp3" },
+            { id: 3, nombre: "MARIMONO", cientifico: "Ateles chamek", img: "ceb06c81-e99b-40fe-8863-b6e7bd666501.jpg", desc: "Primate de hábitos arborícolas que habita en el dosel de los bosques húmedos.<br><br><strong>Dato Curioso:</strong> Carecen de pulgares en sus manos, una adaptación evolutiva para balancearse a gran velocidad entre las ramas.", categoria: "mamifero", sonido: "Sonido Marimono.mp3" },
+            { id: 4, nombre: "TARUCA / VENADO ANDINO", cientifico: "Hippocamelus antisensis", img: "Diseno-sin-titulo-29.jpg", desc: "Ciervo corpulento que vive en grupos familiares en las escarpadas zonas altoandinas.<br><br><strong>Dato Curioso:</strong> Sus pezuñas están anatómicamente adaptadas para trepar y saltar sobre rocas resbaladizas sin perder el equilibrio.", categoria: "mamifero", sonido: "Sonido Siervos.mp3" },
+            { id: 5, nombre: "CHANCHO DE MONTE", cientifico: "Pecari tajacu", img: "chancho de monte 04.jpeg", desc: "Mamífero social que viaja en manadas buscando raíces y frutos caídos en el bosque.<br><br><strong>Dato Curioso:</strong> Tienen una glándula en la parte inferior de la espalda que segrega un olor almizclado muy fuerte.", categoria: "mamifero", sonido: "Sonido Cancho de monte.mp3" },
+            { id: 6, nombre: "PACARANA", cientifico: "Dinomys branickii", img: "pacarana__dinomys_branickii__no_zoologico_do_parque_ambiental_chico_mendes__rio_branco__.jpg", desc: "Roedor corpulento de movimientos lentos y pelaje marrón con rayas y manchas blancas.<br><br><strong>Dato Curioso:</strong> Es uno de los roedores más grandes del mundo y el único representante vivo de una antigua familia de gigantes.", categoria: "roedor", sonido: "Sonido Pacarana.mp3" },
+            { id: 7, nombre: "JOCHI COLORADO", cientifico: "Dasyprocta punctata", img: "507178952_9357785367656840_7279397495556188778_n.jpg", desc: "Roedor diurno muy ágil que habita en el sotobosque, alimentándose de semillas y nueces.<br><br><strong>Dato Curioso:</strong> Tiene la costumbre de enterrar semillas para comerlas después, pero suele olvidarlas, convirtiéndose en el mejor reforestador.", categoria: "roedor", sonido: "Sonido Jochi colorado.mp3" },
+            { id: 8, nombre: "MURCIÉLAGO HEMATÓFAGO", cientifico: "Desmodus rotundus", img: "muercielago.jpg", desc: "Murciélago que se alimenta exclusivamente de la sangre de mamíferos o aves.<br><br><strong>Dato Curioso:</strong> Su saliva contiene una proteína anticoagulante llamada 'draculina' que evita que la herida se cierre.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
+            { id: 9, nombre: "MURCIÉLAGO FRUGÍVORO", cientifico: "Phyllostomus hastatus", img: "large.jpg", desc: "Murciélago de gran tamaño esencial para la regeneración de la flora mediante la dispersión de semillas.<br><br><strong>Dato Curioso:</strong> Tienen un sistema de comunicación complejo; cada familia tiene su propio dialecto.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
+            { id: 10, nombre: "TITI", cientifico: "Saguinus spp.", img: "Portadas-Amazonas-MOno-TITI-LOW.jpg", desc: "Pequeños primates diurnos muy activos que se desplazan velozmente por la selva.<br><br><strong>Dato Curioso:</strong> Las hembras casi siempre dan a luz gemelos, y son los machos quienes asumen la mayor parte del cuidado.", categoria: "mamifero", sonido: "Sonido Mono Titi.mp3" },
+            { id: 11, nombre: "GATO DE PAJONAL", cientifico: "Leopardus tigrinus", img: "WhatsApp Image 2026-03-04 at 11.27.04.jpeg", desc: "Pequeños felinos silvestres sumamente esquivos que habitan en zonas de gran altitud y rocosas.<br><br><strong>Dato Curioso:</strong> El gato andino es considerado el fantasma de los Andes. Su larga cola le sirve como timón.", categoria: "mamifero", sonido: "Sonido Gato pajonal.mp3" },
+            { id: 12, nombre: "ZORRO ANDINO", cientifico: "Lycalopex culpaeus", img: "f28cba57-f446-4556-b2ae-5c264a530a9d.jpg", desc: "Cánido adaptable que regula las poblaciones de roedores en las zonas montañosas.<br><br><strong>Dato Curioso:</strong> A pesar de llamarse zorro, genéticamente pertenece a un grupo sudamericano más emparentado con los lobos.", categoria: "mamifero", sonido: "Sonido Zorro.mp3" },
+            { id: 13, nombre: "TUNQUI / GALLITO DE LAS ROCAS", cientifico: "Rupicola peruvianus", img: "TUNKI.jpg", desc: "Ave emblemática de los Yungas. Los machos poseen un plumaje rojo-anaranjado sumamente brillante.<br><br><strong>Dato Curioso:</strong> Los machos se reúnen en grupos llamados leks para hacer coreografías y emitir chasquidos extraños.", categoria: "ave", sonido: "Sonido Tunki.mp3" },
+            { id: 14, nombre: "CÓNDOR ANDINO", cientifico: "Vultur gryphus", img: "8d81c823-abdf-4c04-83fa-002611abb02f.jpg", desc: "Ave carroñera masiva que habita en las cumbres más altas de Cotapata.<br><br><strong>Dato Curioso:</strong> Puede planear cientos de kilómetros aprovechando las corrientes de aire térmicas sin tener que batir sus alas.", categoria: "ave", sonido: "Sonido Condor.mp3" },
+            { id: 15, nombre: "GUÁCHARO", cientifico: "Steatornis caripensis", img: "483359_10150947721041695_493434887_n.jpg", desc: "Habita en cuevas oscuras y sale de noche a buscar alimento en los árboles frutales.<br><br><strong>Dato Curioso:</strong> Es la única ave nocturna del mundo que se alimenta de frutas y utiliza la ecolocalización para navegar.", categoria: "ave", sonido: "Sonido Guácharo.mp3" },
+            { id: 16, nombre: "ÁGUILA NEGRA Y CASTAÑA", cientifico: "Spizaetus isidori", img: "aguilla negra.jpg", desc: "Poderoso depredador aéreo de los bosques nublados, clave para el equilibrio del ecosistema.<br><br><strong>Dato Curioso:</strong> Las crías nacen con plumaje blanco y tardan hasta 4 años en obtener el característico color negro y castaño.", categoria: "ave", sonido: "Sonido Aguila negra y castaña.mp3" },
+            { id: 17, nombre: "PAVA ANDINA", cientifico: "Penelope montagnii", img: "900.jpg", desc: "Ave de mediano tamaño que camina por las gruesas ramas de los árboles buscando bayas y hojas.<br><br><strong>Dato Curioso:</strong> En lugar de cantar para marcar territorio, los machos a menudo tamborean ruidosamente con sus alas.", categoria: "ave", sonido: "Sonido Pava andina.mp3" },
+            { id: 18, nombre: "PAVA ALA DE HOZ", cientifico: "Chamaepetes goudotii", img: "sickle_winged_guan-1.jpg", desc: "Suele moverse sigilosamente entre el espeso follaje de los estratos medios del bosque.<br><br><strong>Dato Curioso:</strong> Sus alas tienen plumas modificadas con forma de hoz que producen un fuerte silbido vibratorio.", categoria: "ave", sonido: "Sonido Pavo ala de hoz.mp3" },
+            { id: 19, nombre: "COLIBRÍ BOLIVIANO", cientifico: "Aglaeactis pamela", img: "WhatsApp Image 2026-03-04 at 11.23.32.jpeg", desc: "Pequeña ave de vuelo extremadamente rápido y preciso, vital para la polinización.<br><br><strong>Dato Curioso:</strong> Es una especie estrictamente endémica de Bolivia, no existe silvestre en ninguna otra parte.", categoria: "ave", sonido: "Sonido Colibri de sol boliviano.mp3" },
+            { id: 20, nombre: "REMOLINERA REAL", cientifico: "Cinclodes aricomae", img: "WhatsApp Image 2026-03-04 at 11.26.34.jpeg", desc: "Ave pequeña adaptada a los rigores de la puna, buscando insectos entre los troncos descascarados.<br><br><strong>Dato Curioso:</strong> Está en peligro crítico de extinción porque su supervivencia depende de los bosques de queñua.", categoria: "ave", sonido: "Sonido Remolina real.mp3" }
         ];
 
         const baseDatosFlora = [
-            { nombre: "PASTO ALTOANDINO", cientifico: "Festuca dolichophylla", img: "festuca-dolichophylla.jpg", desc: "Hierba resistente típica de la puna que forma densos manojos dorados.<br><br><strong>Dato Curioso:</strong> Sus raíces son tan profundas que funcionan como una malla natural, evitando la erosión del suelo." },
-            { nombre: "GRAMÍNEAS ALTOANDINAS", cientifico: "Cinnagrostis spp.", img: "Cinnagrostisspp.jpg", desc: "Vegetación herbácea que domina los paisajes abiertos de las zonas frías del parque.<br><br><strong>Dato Curioso:</strong> Contienen cristales de sílice en sus hojas, lo que las hace duras y ásperas, protegiéndolas del frío." },
-            { nombre: "BOFEDAL", cientifico: "Distichia muscoides", img: "Distichia_muscoides_2.jpg", desc: "Especie que forma ecosistemas de humedales en la altura, vitales para retener agua.<br><br><strong>Dato Curioso:</strong> Crece formando cojines tan densos que un animal pesado puede caminar sobre ellos sin hundirse." },
-            { nombre: "BOFEDAL DE HOJA TUBULAR", cientifico: "Plantago tubuloso", img: "Plantago tubulosa.jpg", desc: "Pequeña planta de los humedales de altura adaptada a vivir con sus raíces sumergidas.<br><br><strong>Dato Curioso:</strong> Sus raíces actúan como un poderoso filtro natural, absorbiendo metales pesados y purificando el agua." },
-            { nombre: "BOFEDAL ESPINOSO", cientifico: "Oxychloe andina", img: "Oxychloe.jpg", desc: "Planta formadora de cojines duros en los ecosistemas húmedos altoandinos.<br><br><strong>Dato Curioso:</strong> Las puntas de sus pequeñas hojas terminan en espinas muy afiladas para evitar ser devorada." },
-            { nombre: "QUEÑUA", cientifico: "Polylepis pepei", img: "Polylepis pepei.jpg", desc: "Árbol retorcido que forma pequeños bosques en las faldas rocosas de las montañas frías.<br><br><strong>Dato Curioso:</strong> Es uno de los árboles que crece a mayor altitud. Su corteza se descama para crear aislamiento térmico." },
-            { nombre: "PINO DE MONTE", cientifico: "Podocarpus rusbyi", img: "Podocarpusrusbyi.jpg", desc: "Gran conífera nativa que domina las partes altas de los bosques nublados de Cotapata.<br><br><strong>Dato Curioso:</strong> A diferencia de los pinos norteamericanos, produce unos curiosos conos carnosos que atraen a las aves." },
-            { nombre: "PINO DE MONTE INGENSIS", cientifico: "Podocarpus ingensis", img: "Podocarpus ingensis.jpg", desc: "Otra especie de conífera andina, fundamental para la retención de neblina.<br><br><strong>Dato Curioso:</strong> Su madera contiene resinas que la hacen tan resistente a hongos que se usaba para construir puentes." },
-            { nombre: "IOTAVIO", cientifico: "Weinmannia boliviensis", img: "Weinmanniaboliviensis.jpg", desc: "Árbol frondoso característico del bosque de ceja de monte y Yungas.<br><br><strong>Dato Curioso:</strong> Juega el papel de cosechador de agua; sus hojas atrapan gotas de niebla y las canalizan hacia el suelo." },
-            { nombre: "HUAYCHA", cientifico: "Weinmannia crassifolia", img: "Weinmannia_pinnata_1.jpg", desc: "Especie arbórea de ramas gruesas y hojas coriáceas que resisten los fuertes vientos.<br><br><strong>Dato Curioso:</strong> Produce una resina natural pegajosa que aves e insectos usan como pegamento biológico para nidos." },
-            { nombre: "NOGAL", cientifico: "Juglans boliviana", img: "NOGAL.jpg", desc: "Árbol imponente de madera oscura que se encuentra en las partes más cálidas del parque.<br><br><strong>Dato Curioso:</strong> Produce unas nueces esféricas cubiertas de cáscara muy dura que tiñen el suelo de negro al caer." },
-            { nombre: "YURAJ HUAYCHA", cientifico: "Miconia theaezans", img: "Miconia theaezans.jpg", desc: "Arbusto o árbol pequeño de hojas llamativas que crece en claros del bosque.<br><br><strong>Dato Curioso:</strong> Produce floraciones explosivas con cientos de flores simultáneamente, atrayendo muchos colibríes." },
-            { nombre: "CEDRO", cientifico: "Cedrela lilloi", img: "Cedrela_odorata_foliage.jpg", desc: "Especie maderable muy valorada que forma parte del dosel del bosque montano.<br><br><strong>Dato Curioso:</strong> Su madera emite un aroma aceitoso que funciona como un insecticida natural perfecto, repeliendo termitas." },
-            { nombre: "ALISO", cientifico: "Alnus acuminata", img: "acuminata.jpg", desc: "Árbol pionero que crece rápidamente a las orillas de los ríos y zonas de deslizamientos.<br><br><strong>Dato Curioso:</strong> Hace simbiosis con bacterias para fijar nitrógeno directo a la tierra, actuando como fertilizante vivo." },
-            { nombre: "YARUMA", cientifico: "Hesperomeles ferruginea", img: "Hesperomelesferruginea.jpg", desc: "Árbol de tamaño medio con hojas cubiertas de unos pelillos que le dan un tono rojizo.<br><br><strong>Dato Curioso:</strong> Pertenece a la misma familia botánica que las manzanas y las rosas." },
-            { nombre: "ALISO COLORADO", cientifico: "Myrica pubescens", img: "Myricapubescens.jpg", desc: "Arbusto perenne que crece en las laderas y soporta suelos relativamente pobres.<br><br><strong>Dato Curioso:</strong> Sus pequeños frutos están cubiertos por una cera natural que los pájaros comen para obtener energía rápida." },
-            { nombre: "LAURELES", cientifico: "Ocotea spp.", img: "Ocotea.jpg", desc: "Árboles robustos cuyas flores y frutos nutren a muchas especies de tucanes y roedores.<br><br><strong>Dato Curioso:</strong> Si aplastas sus hojas, liberan un olor fuerte y picante, a menudo similar al de la canela." },
-            { nombre: "QUINA", cientifico: "Cinchona officinalis", img: "Cinchonaofficinalis.jpg", desc: "Árbol legendario originario de los bosques andinos, reconocido a nivel mundial.<br><br><strong>Dato Curioso:</strong> De su corteza se extrae la quinina, que fue durante siglos la única cura conocida para la malaria." },
-            { nombre: "BILKA", cientifico: "Anadenanthera colubrina", img: "Anadenantheracolubrina.jpg", desc: "Árbol de las tierras bajas de Cotapata, de corteza rugosa y vainas largas.<br><br><strong>Dato Curioso:</strong> Las semillas de sus vainas han sido utilizadas durante miles de años en ceremonias andinas." },
-            { nombre: "FLOR ENDÉMICA", cientifico: "Ourisia cotapatensis", img: "Ourisiacotapatensis.jpg", desc: "Pequeña planta herbácea con flores que crece en los hábitats de mayor altitud.<br><br><strong>Dato Curioso:</strong> Es un testimonio de inmensa biodiversidad; fue descubierta para la ciencia apenas en 2003." }
+            { id: 21, nombre: "PASTO ALTOANDINO", cientifico: "Festuca dolichophylla", img: "festuca-dolichophylla.jpg", desc: "Hierba resistente típica de la puna que forma densos manojos dorados.<br><br><strong>Dato Curioso:</strong> Sus raíces son tan profundas que funcionan como una malla natural, evitando la erosión del suelo." },
+            { id: 22, nombre: "GRAMÍNEAS ALTOANDINAS", cientifico: "Cinnagrostis spp.", img: "Cinnagrostisspp.jpg", desc: "Vegetación herbácea que domina los paisajes abiertos de las zonas frías del parque.<br><br><strong>Dato Curioso:</strong> Contienen cristales de sílice en sus hojas, lo que las hace duras y ásperas, protegiéndolas del frío." },
+            { id: 23, nombre: "BOFEDAL", cientifico: "Distichia muscoides", img: "Distichia_muscoides_2.jpg", desc: "Especie que forma ecosistemas de humedales en la altura, vitales para retener agua.<br><br><strong>Dato Curioso:</strong> Crece formando cojines tan densos que un animal pesado puede caminar sobre ellos sin hundirse." },
+            { id: 24, nombre: "BOFEDAL DE HOJA TUBULAR", cientifico: "Plantago tubuloso", img: "Plantago tubulosa.jpg", desc: "Pequeña planta de los humedales de altura adaptada a vivir con sus raíces sumergidas.<br><br><strong>Dato Curioso:</strong> Sus raíces actúan como un poderoso filtro natural, absorbiendo metales pesados y purificando el agua." },
+            { id: 25, nombre: "BOFEDAL ESPINOSO", cientifico: "Oxychloe andina", img: "Oxychloe.jpg", desc: "Planta formadora de cojines duros en los ecosistemas húmedos altoandinos.<br><br><strong>Dato Curioso:</strong> Las puntas de sus pequeñas hojas terminan en espinas muy afiladas para evitar ser devorada." },
+            { id: 26, nombre: "QUEÑUA", cientifico: "Polylepis pepei", img: "Polylepis pepei.jpg", desc: "Árbol retorcido que forma pequeños bosques en las faldas rocosas de las montañas frías.<br><br><strong>Dato Curioso:</strong> Es uno de los árboles que crece a mayor altitud. Su corteza se descama para crear aislamiento térmico." },
+            { id: 27, nombre: "PINO DE MONTE", cientifico: "Podocarpus rusbyi", img: "Podocarpusrusbyi.jpg", desc: "Gran conífera nativa que domina las partes altas de los bosques nublados de Cotapata.<br><br><strong>Dato Curioso:</strong> A diferencia de los pinos norteamericanos, produce unos curiosos conos carnosos que atraen a las aves." },
+            { id: 28, nombre: "PINO DE MONTE INGENSIS", cientifico: "Podocarpus ingensis", img: "Podocarpus ingensis.jpg", desc: "Otra especie de conífera andina, fundamental para la retención de neblina.<br><br><strong>Dato Curioso:</strong> Su madera contiene resinas que la hacen tan resistente a hongos que se usaba para construir puentes." },
+            { id: 29, nombre: "IOTAVIO", cientifico: "Weinmannia boliviensis", img: "Weinmanniaboliviensis.jpg", desc: "Árbol frondoso característico del bosque de ceja de monte y Yungas.<br><br><strong>Dato Curioso:</strong> Juega el papel de cosechador de agua; sus hojas atrapan gotas de niebla y las canalizan hacia el suelo." },
+            { id: 30, nombre: "HUAYCHA", cientifico: "Weinmannia crassifolia", img: "Weinmannia_pinnata_1.jpg", desc: "Especie arbórea de ramas gruesas y hojas coriáceas que resisten los fuertes vientos.<br><br><strong>Dato Curioso:</strong> Produce una resina natural pegajosa que aves e insectos usan como pegamento biológico para nidos." },
+            { id: 31, nombre: "NOGAL", cientifico: "Juglans boliviana", img: "NOGAL.jpg", desc: "Árbol imponente de madera oscura que se encuentra en las partes más cálidas del parque.<br><br><strong>Dato Curioso:</strong> Produce unas nueces esféricas cubiertas de cáscara muy dura que tiñen el suelo de negro al caer." },
+            { id: 32, nombre: "YURAJ HUAYCHA", cientifico: "Miconia theaezans", img: "Miconia theaezans.jpg", desc: "Arbusto o árbol pequeño de hojas llamativas que crece en claros del bosque.<br><br><strong>Dato Curioso:</strong> Produce floraciones explosivas con cientos de flores simultáneamente, atrayendo muchos colibríes." },
+            { id: 33, nombre: "CEDRO", cientifico: "Cedrela lilloi", img: "Cedrela_odorata_foliage.jpg", desc: "Especie maderable muy valorada que forma parte del dosel del bosque montano.<br><br><strong>Dato Curioso:</strong> Su madera emite un aroma aceitoso que funciona como un insecticida natural perfecto, repeliendo termitas." },
+            { id: 34, nombre: "ALISO", cientifico: "Alnus acuminata", img: "acuminata.jpg", desc: "Árbol pionero que crece rápidamente a las orillas de los ríos y zonas de deslizamientos.<br><br><strong>Dato Curioso:</strong> Hace simbiosis con bacterias para fijar nitrógeno directo a la tierra, actuando como fertilizante vivo." },
+            { id: 35, nombre: "YARUMA", cientifico: "Hesperomeles ferruginea", img: "Hesperomelesferruginea.jpg", desc: "Árbol de tamaño medio con hojas cubiertas de unos pelillos que le dan un tono rojizo.<br><br><strong>Dato Curioso:</strong> Pertenece a la misma familia botánica que las manzanas y las rosas." },
+            { id: 36, nombre: "ALISO COLORADO", cientifico: "Myrica pubescens", img: "Myricapubescens.jpg", desc: "Arbusto perenne que crece en las laderas y soporta suelos relativamente pobres.<br><br><strong>Dato Curioso:</strong> Sus pequeños frutos están cubiertos por una cera natural que los pájaros comen para obtener energía rápida." },
+            { id: 37, nombre: "LAURELES", cientifico: "Ocotea spp.", img: "Ocotea.jpg", desc: "Árboles robustos cuyas flores y frutos nutren a muchas especies de tucanes y roedores.<br><br><strong>Dato Curioso:</strong> Si aplastas sus hojas, liberan un olor fuerte y picante, a menudo similar al de la canela." },
+            { id: 38, nombre: "QUINA", cientifico: "Cinchona officinalis", img: "Cinchonaofficinalis.jpg", desc: "Árbol legendario originario de los bosques andinos, reconocido a nivel mundial.<br><br><strong>Dato Curioso:</strong> De su corteza se extrae la quinina, que fue durante siglos la única cura conocida para la malaria." },
+            { id: 39, nombre: "BILKA", cientifico: "Anadenanthera colubrina", img: "Anadenantheracolubrina.jpg", desc: "Árbol de las tierras bajas de Cotapata, de corteza rugosa y vainas largas.<br><br><strong>Dato Curioso:</strong> Las semillas de sus vainas han sido utilizadas durante miles de años en ceremonias andinas." },
+            { id: 40, nombre: "FLOR ENDÉMICA", cientifico: "Ourisia cotapatensis", img: "Ourisiacotapatensis.jpg", desc: "Pequeña planta herbácea con flores que crece en los hábitats de mayor altitud.<br><br><strong>Dato Curioso:</strong> Es un testimonio de inmensa biodiversidad; fue descubierta para la ciencia apenas en 2003." }
         ];
 
-        // --- 3. LÓGICA DE INTERFAZ ---
+        // --- LÓGICA DE INTERFAZ ---
         function mostrarSeccion(id, btn) {
             let secciones = document.querySelectorAll('.content-section');
-            for(let i = 0; i < secciones.length; i++) { secciones[i].classList.remove('active'); }
+            for(let i = 0; i < secciones.length; i++) {
+                secciones[i].classList.remove('active');
+            }
             
             let botones = document.querySelectorAll('.menu-btn');
-            for(let j = 0; j < botones.length; j++) { botones[j].classList.remove('active'); }
+            for(let j = 0; j < botones.length; j++) {
+                botones[j].classList.remove('active');
+            }
             
             document.getElementById(id).classList.add('active');
             btn.classList.add('active');
             
-            document.getElementById('fauna-tools').style.display = (id === 'fauna') ? 'block' : 'none';
+            let faunaTools = document.getElementById('fauna-tools');
+            if (id === 'fauna') {
+                faunaTools.style.display = 'block';
+            } else {
+                faunaTools.style.display = 'none';
+            }
         }
 
         function filtrarCategoria(cat, btn) {
             let botones = document.querySelectorAll('.pill-btn');
-            for(let k = 0; k < botones.length; k++) { botones[k].classList.remove('active'); }
+            for(let k = 0; k < botones.length; k++) {
+                botones[k].classList.remove('active');
+            }
             btn.classList.add('active');
             
             let tarjetas = document.getElementById('grid-fauna').children;
             for (let i = 0; i < tarjetas.length; i++) {
                 let coincide = 0;
-                if (cat === 'todo') { coincide = 1; } 
-                else if (baseDatosFauna[i].categoria === cat) { coincide = 1; }
+                if (cat === 'todo') {
+                    coincide = 1;
+                } else if (baseDatosFauna[i].categoria === cat) {
+                    coincide = 1;
+                }
                 
-                tarjetas[i].style.display = (coincide === 1) ? 'block' : 'none';
+                if (coincide === 1) {
+                    tarjetas[i].style.display = 'block';
+                } else {
+                    tarjetas[i].style.display = 'none';
+                }
             }
         }
 
@@ -276,7 +339,11 @@
             document.getElementById('audio-animal').pause(); 
         }
 
-        function checkCerrarModal(e) { if(e.target.id === 'modal') cerrarModal(); }
+        function checkCerrarModal(e) { 
+            if(e.target.id === 'modal') {
+                cerrarModal(); 
+            }
+        }
 
         function reproducirTTS() { 
             window.speechSynthesis.cancel(); 
@@ -285,12 +352,23 @@
             window.speechSynthesis.speak(msg); 
         }
 
-        function pausarAudio() { window.speechSynthesis.cancel(); }
-        function reproducirSonidoAnimal() { document.getElementById('audio-animal').play(); }
-        function pausarSonidoAnimal() { document.getElementById('audio-animal').pause(); }
-        function toggleAccordion(h) { h.parentElement.classList.toggle('active'); }
+        function pausarAudio() { 
+            window.speechSynthesis.cancel(); 
+        }
 
-        // --- 4. GENERACIÓN DE DATOS ---
+        function reproducirSonidoAnimal() { 
+            document.getElementById('audio-animal').play(); 
+        }
+
+        function pausarSonidoAnimal() { 
+            document.getElementById('audio-animal').pause(); 
+        }
+
+        function toggleAccordion(h) { 
+            h.parentElement.classList.toggle('active'); 
+        }
+
+        // --- GENERACIÓN DE DATOS ---
         window.onload = function() {
             let gridFauna = document.getElementById('grid-fauna');
             for(let i = 0; i < baseDatosFauna.length; i++) {
