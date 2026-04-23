@@ -5,145 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cotapata - Guía de Bolsillo</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#235030">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/png" href="LOGOO.png">
+    <link rel="apple-touch-icon" href="LOGOO.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #235030;
-            --secondary: #88ab75; 
-            --accent: #f39c12; 
-            --bg: #f0f7f4;
-            --text: #2c3e50;
-            --card-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            --primary: #235030; --secondary: #88ab75; --accent: #f39c12; 
+            --bg: #f0f7f4; --text: #2c3e50; --card-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; width: 100%; height: 100%;}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 0; overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
+        /* --- 1. PANTALLA DE INICIO (SPLASH) --- */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+        .img-portada { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; opacity: 0.85; }
+        
+        /* NUEVA UBICACIÓN DEL LOGO UNIVERSIDAD (Arriba Izquierda en Splash) */
+        #logo-uni-splash { position: absolute; top: 20px; left: 20px; height: 50px; cursor: pointer; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
-        /* --- 1. PANTALLA DE VIDEO (ENTRADA DIRECTA) --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: black; z-index: 9999;
-        }
-        #intro-video {
-            width: 100%; height: 100%; object-fit: cover;
-        }
+        #intro-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9998; display: none; background-color: black; }
 
-        /* --- 2. HEADER Y MENÚ --- */
-        header {
-            background: var(--primary); color: white; padding: 15px; text-align: center;
-            border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+        .btn-comenzar {
+            position: absolute; bottom: 18%; z-index: 2;
+            background: var(--accent); color: white; border: none;
+            padding: 16px 40px; border-radius: 35px; font-size: 1.3rem; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+            animation: latido 2s infinite ease-in-out;
         }
-        header h1 { margin: 0; font-size: 1.3rem; }
+        @keyframes latido { 0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.4); } 50% { transform: scale(1.08); box-shadow: 0 10px 25px rgba(243, 156, 18, 0.8); } 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.4); } }
 
-        .menu-container {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            padding: 15px; max-width: 600px; margin: 0 auto;
+        /* --- 2. CABECERA LIMPIA --- */
+        header { background: var(--primary); color: white; padding: 15px; text-align: center; position: relative; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 1.3rem; padding: 0 40px; /* Espacio para el botón hamburguesa */ }
+        
+        /* Botón Hamburguesa Mejorado (Mayor área de toque para móviles) */
+        .btn-hamburguesa { position: absolute; top: 0; right: 0; height: 100%; width: 55px; font-size: 1.8rem; background: none; border: none; color: white; cursor: pointer; z-index: 101; display: flex; justify-content: center; align-items: center; }
+
+        /* --- MENÚ LATERAL (SIDEBAR) --- */
+        #side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2500;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2); transition: right 0.3s ease; display: flex; flex-direction: column; padding-top: 60px;
         }
-        .menu-btn {
-            background-color: white; color: var(--primary); border: none;
-            padding: 12px 5px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
-            box-shadow: var(--card-shadow); cursor: pointer; text-transform: uppercase;
-        }
+        #side-menu.abierto { right: 0; }
+        .btn-cerrar-menu { position: absolute; top: 15px; right: 20px; font-size: 2.2rem; background: none; border: none; color: var(--primary); cursor: pointer; }
+        .side-item { padding: 20px; border-bottom: 1px solid #eee; font-weight: 600; color: var(--primary); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 12px; -webkit-tap-highlight-color: rgba(35, 80, 48, 0.1); }
+        .side-item:hover { background: #f0f7f4; }
+        #menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2499; display: none; }
+
+        /* Pestañas Principales */
+        .menu-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
+        .menu-btn { background-color: white; color: var(--primary); border: none; padding: 12px 5px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; box-shadow: var(--card-shadow); cursor: pointer; text-transform: uppercase; }
         .menu-btn.active { background-color: var(--primary); color: white; }
 
         /* --- 3. FILTROS --- */
         #fauna-tools { max-width: 600px; margin: 0 auto; padding: 0 15px 15px 15px; }
         .filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; justify-content: center; }
-        .pill-btn {
-            background-color: #e5f2eb; color: var(--primary); border: none;
-            padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-            white-space: nowrap; cursor: pointer;
-        }
+        .pill-btn { background-color: #e5f2eb; color: var(--primary); border: none; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
         .pill-btn.active { background-color: var(--accent); color: white; }
 
         /* --- 4. GRID DE TARJETAS --- */
         .content-section { display: none; padding: 15px; }
         .content-section.active { display: block; }
-        .grid-container {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
-            max-width: 1200px; margin: 0 auto;
-        }
-        .mini-card {
-            background: white; padding: 10px; border-radius: 15px; text-align: center;
-            box-shadow: var(--card-shadow); cursor: pointer; border: 1px solid #ddd;
-        }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1200px; margin: 0 auto; padding-bottom: 20px; }
+        .mini-card { background: white; padding: 10px; border-radius: 15px; text-align: center; box-shadow: var(--card-shadow); cursor: pointer; border: 1px solid #ddd; }
         .img-container { width: 100%; height: 110px; border-radius: 10px; overflow: hidden; background-color: #eee; }
         .mini-card img { width: 100%; height: 100%; object-fit: cover; }
         .mini-card h3 { font-size: 0.85rem; margin: 10px 0 2px; color: var(--primary); font-weight: 700; line-height: 1.2; }
 
-        /* --- 5. MODAL (FONDO ELEGANTE) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; z-index: 1000;
-            justify-content: center; align-items: flex-end;
-            background-size: cover; background-position: center;
-        }
+        /* --- 5. MODALES OPTIMIZADOS --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 3000; justify-content: center; align-items: flex-end; background-size: cover; background-position: center; background-color: rgba(0,0,0,0.85); transition: opacity 0.3s ease; }
         .modal-overlay.active { display: flex; }
-        .info-box {
-            background-color: white; width: 100%; padding: 25px 20px;
-            border-top-left-radius: 25px; border-top-right-radius: 25px;
-            max-height: 80vh; overflow-y: auto; position: relative;
-        }
-        .btn-cerrar {
-            position: absolute; top: 15px; right: 15px; background: #e74c3c;
-            color: white; border: none; font-size: 1.2rem; width: 35px; height: 35px;
-            border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center;
-        }
+        .info-box { background-color: white; width: 100%; padding: 25px 20px; border-top-left-radius: 25px; border-top-right-radius: 25px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
+        .btn-cerrar { position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; font-size: 1.2rem; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 10; }
+        
+        .info-box h2 { font-size: 1.35rem; margin: 0 0 5px; color: var(--primary); padding-right: 40px;}
+        .info-box h3 { font-size: 0.95rem; margin: 0 0 18px; font-style: italic; color: #666; font-weight: 400;}
+        .info-box p { font-size: 0.9rem; line-height: 1.6; color: #333; margin-bottom: 15px; }
 
-        .info-box h2 { font-size: 1.3rem; margin: 0 0 5px; color: var(--primary); padding-right: 30px;}
-        .info-box h3 { font-size: 0.9rem; margin: 0 0 15px; font-style: italic; color: #666; }
-        .info-box p { font-size: 0.9rem; line-height: 1.5; color: #333; margin-bottom: 15px; }
+        /* --- ACORDEONES Y EQUIPO --- */
+        .accordion-item { background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; overflow: hidden; }
+        .accordion-header { padding: 15px; color: var(--primary); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .accordion-content { padding: 0 15px; display: none; color: #444; font-size: 0.9rem; line-height: 1.5; }
+        .accordion-item.active .accordion-header { background-color: #e5f2eb; border-bottom: 1px solid #eee; }
+        .accordion-item.active .accordion-content { display: block; padding: 15px; }
+        
+        .team-list { list-style: none; padding: 0; margin: 10px 0; }
+        .team-list li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; color: #333; }
+        .team-subtitle { font-size: 0.8rem; color: var(--accent); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         /* --- 6. AUDIO --- */
-        .audio-container {
-            display: flex; flex-direction: column; gap: 10px; margin: 15px 0;
-            background-color: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee;
-        }
+        .audio-container { display: flex; flex-direction: column; gap: 10px; margin: 18px 0; background-color: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
         .audio-row { display: flex; gap: 10px; }
-        .btn-audio {
-            background-color: var(--secondary); color: white; border: none; padding: 12px;
-            border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; font-size: 0.85rem;
-        }
-        .btn-pause { background-color: #e74c3c; flex: 0.3; font-size: 1.2rem; } 
+        .btn-audio { background-color: var(--secondary); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-pause { background-color: #e74c3c; flex: 0.3; font-size: 1.3rem; padding: 14px 0;} 
         .btn-sound { background-color: var(--accent); }
-
-        /* --- 7. ACORDEONES GUÍA --- */
-        .accordion-item { background: white; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
-        .accordion-header { padding: 15px; color: var(--primary); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; }
-        .accordion-content { padding: 0 15px; display: none; color: #444; font-size: 0.9rem; line-height: 1.5; }
-        .accordion-item.active .accordion-header { background-color: #e5f2eb; border-radius: 10px 10px 0 0; }
-        .accordion-item.active .accordion-content { display: block; padding: 15px; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen" onclick="saltarVideo()">
-        <video id="intro-video" autoplay muted playsinline>
-            <source src="Video.mp4" type="video/mp4">
-        </video>
+    <video id="intro-video" playsinline preload="auto">
+        <source src="Video.mp4" type="video/mp4">
+    </video>
+
+    <div id="splash-screen">
+        <img src="oso_portada.png" alt="Portada" class="img-portada">
+        
+        <img id="logo-uni-splash" src="Web uni.png" alt="Universidad Salesiana" onclick="window.open('https://www.usalesiana.edu.bo/principal/es', '_blank')">
+        
+        <button class="btn-comenzar" onclick="iniciarConSonido()" id="ui-btn-comenzar">🚀 Comenzar Aventura</button>
     </div>
 
     <header>
-        <h1>Cotapata: Guía de Bolsillo</h1>
+        <h1 id="ui-titulo-app">Cotapata: Guía</h1>
+        <button class="btn-hamburguesa" onclick="abrirMenu()">☰</button>
     </header>
 
+    <div id="menu-overlay" onclick="cerrarMenu()"></div>
+    <div id="side-menu">
+        <button class="btn-cerrar-menu" onclick="cerrarMenu()">×</button>
+        <div class="side-item" onclick="cambiarIdioma()">
+            <span id="ui-btn-idioma">🌐 Cambiar a Inglés (EN)</span>
+        </div>
+        <div class="side-item" onclick="abrirModalExtra('guia')">
+            <span id="ui-btn-guia">🎒 Guía de Ruta</span>
+        </div>
+        <div class="side-item" onclick="abrirModalExtra('equipo')">
+            <span id="ui-btn-equipo">👥 Nuestro Equipo</span>
+        </div>
+    </div>
+
     <div class="menu-container">
-        <button class="menu-btn active" onclick="mostrarSeccion('fauna', this)">🐾 Fauna</button>
-        <button class="menu-btn" onclick="mostrarSeccion('flora', this)">🌿 Flora</button>
-        <button class="menu-btn" onclick="mostrarSeccion('guia', this)">🎒 Guía</button>
+        <button class="menu-btn active" onclick="mostrarSeccion('fauna', this)" id="ui-tab-fauna">🐾 Fauna</button>
+        <button class="menu-btn" onclick="mostrarSeccion('flora', this)" id="ui-tab-flora">🌿 Flora</button>
     </div>
 
     <main id="fauna" class="content-section active">
         <div id="fauna-tools"> 
             <div class="filter-pills">
-                <button class="pill-btn active" onclick="filtrarCategoria('todo', this)">✨ Todas</button>
-                <button class="pill-btn" onclick="filtrarCategoria('mamifero', this)">🦊 Mamíferos</button>
-                <button class="pill-btn" onclick="filtrarCategoria('ave', this)">🐦 Aves</button>
-                <button class="pill-btn" onclick="filtrarCategoria('roedor', this)">🐭 Roedores</button>
+                <button class="pill-btn active" onclick="filtrarCategoria('todo', this)" id="ui-filtro-todas">✨ Todas</button>
+                <button class="pill-btn" onclick="filtrarCategoria('mamifero', this)" id="ui-filtro-mamiferos">🦊 Mamíferos</button>
+                <button class="pill-btn" onclick="filtrarCategoria('ave', this)" id="ui-filtro-aves">🐦 Aves</button>
+                <button class="pill-btn" onclick="filtrarCategoria('roedor', this)" id="ui-filtro-roedores">🐭 Roedores</button>
             </div>
         </div>
         <div class="grid-container" id="grid-fauna"></div>
@@ -153,242 +160,320 @@
         <div class="grid-container" id="grid-flora"></div>
     </main>
 
-    <main id="guia" class="content-section">
-        <div class="grid-container" style="grid-template-columns: 1fr;">
-            <div class="accordion-item active" onclick="toggleAccordion(this)">
-                <div class="accordion-header">⚠️ Primeros Auxilios <span>▼</span></div>
-                <div class="accordion-content">
-                    <strong>Picadura de Insecto:</strong> Lave la zona con agua y jabón. No frote. Aplique compresas frías.<br><br>
-                    <strong>Mal de Altura (Sorojchi):</strong> Detenga la marcha, descanse, hidrátese (té de coca) y respire profundamente. Si no mejora, descienda inmediatamente.<br><br>
-                    <strong>Esguince en Sendero:</strong> Inmovilice la zona. Aplique frío si es posible. No fuerce la marcha, pida ayuda.
-                </div>
-            </div>
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">🐆 Seguridad en la Ruta <span>▼</span></div>
-                <div class="accordion-content">
-                    <strong>Avistamiento de Puma:</strong> Mantenga la calma. No corra ni dé la espalda. Hágase ver más grande (levante brazos). Hable fuerte y firme.<br><br>
-                    <strong>Extravío:</strong> Deténgase inmediatamente. Use silbato si tiene. No camine sin rumbo. Busque un lugar seguro y visible.
-                </div>
-            </div>
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">🎒 Qué llevar en tu mochila <span>▼</span></div>
-                <div class="accordion-content">
-                    Mínimo 2 litros de agua por persona. Protector solar y gorra. Poncho de lluvia (el clima cambia rápido). Ropa por capas (abrigo y ligera). Silbato, linterna y mapa de la ruta.
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div class="modal-overlay" id="modal" onclick="checkCerrarModal(event)">
+    <div class="modal-overlay" id="modal-animal" onclick="checkCerrarModal('modal-animal', event)">
         <div class="info-box">
-            <button class="btn-cerrar" onclick="cerrarModal()">×</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modal-animal')">×</button>
             <h2 id="modal-titulo">Nombre</h2>
             <h3 id="modal-cientifico">Científico</h3>
-            
             <div class="audio-container">
                 <div class="audio-row">
-                    <button class="btn-audio" onclick="reproducirTTS()">🔊 Escuchar Guía</button>
+                    <button class="btn-audio" onclick="reproducirTTS()" id="ui-btn-escuchar">🔊 Escuchar Guía</button>
                     <button class="btn-audio btn-pause" onclick="pausarAudio()">■</button>
                 </div>
                 <div class="audio-row" id="row-sonido-animal">
-                    <button class="btn-audio btn-sound" onclick="reproducirSonidoAnimal()">🐾 Sonido Real</button>
+                    <button class="btn-audio btn-sound" onclick="reproducirSonidoAnimal()" id="ui-btn-sonido">🐾 Sonido Real</button>
                     <button class="btn-audio btn-pause" onclick="pausarSonidoAnimal()">■</button>
                 </div>
             </div>
-
             <div id="modal-descripcion"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-extra" onclick="checkCerrarModal('modal-extra', event)">
+        <div class="info-box" style="border-radius: 25px; top: 10%;">
+            <button class="btn-cerrar" onclick="cerrarModal('modal-extra')">×</button>
+            <h2 id="modal-extra-titulo">Título</h2>
+            <div id="modal-extra-contenido" style="margin-top: 15px;"></div>
         </div>
     </div>
 
     <audio id="audio-animal" preload="none"></audio>
 
     <script>
-        // --- LÓGICA DE VIDEO AUTOPLAY Y SALTO ---
+        // --- ESTADO DE LA APP ---
+        let idiomaActual = 'es'; 
+        
+        // --- 1. LÓGICA DEL VIDEO ---
         var videoIntro = document.getElementById('intro-video');
         var splashScreen = document.getElementById('splash-screen');
-        var saltoRealizado = 0;
 
-        videoIntro.onended = function() {
-            saltarVideo();
-        };
-
-        function saltarVideo() {
-            if (saltoRealizado === 0) {
-                saltoRealizado = 1;
-                videoIntro.pause();
-                splashScreen.style.display = 'none';
-            }
+        function iniciarConSonido() {
+            splashScreen.style.opacity = '0';
+            videoIntro.style.display = 'block';
+            videoIntro.play().catch(function() { terminarVideo(); });
+            setTimeout(function() { splashScreen.style.display = 'none'; }, 500);
+            videoIntro.onclick = function() { terminarVideo(); };
         }
 
-        // --- BASE DE DATOS EXACTA PROPORCIONADA ---
+        videoIntro.onended = function() { terminarVideo(); };
+        function terminarVideo() { videoIntro.pause(); videoIntro.style.display = 'none'; }
+
+        // --- 2. FUNCIONES DEL MENÚ HAMBURGUESA (Optimizadas) ---
+        function abrirMenu() {
+            // Asegurar que no haya modales abiertos
+            cerrarModal('modal-animal');
+            cerrarModal('modal-extra');
+            
+            document.getElementById('side-menu').classList.add('abierto');
+            document.getElementById('menu-overlay').style.display = 'block';
+        }
+        function cerrarMenu() {
+            document.getElementById('side-menu').classList.remove('abierto');
+            document.getElementById('menu-overlay').style.display = 'none';
+        }
+
+        // --- 3. BASE DE DATOS BILINGÜE ---
         const baseDatosFauna = [
-            { id: 1, nombre: "OSO ANDINO / JUCUMARI", cientifico: "Tremarctos ornatus", img: "oso-frontino-2-1.jpg", desc: "Habita en los bosques nublados de Cotapata y es vital para la dispersión de semillas grandes.<br><br><strong>Dato Curioso:</strong> Es el único oso nativo de Sudamérica. Las manchas claras en su rostro y pecho son únicas en cada individuo.", categoria: "mamifero", sonido: "Sonido Oso jukumari.mp3" },
-            { id: 2, nombre: "PUMA", cientifico: "Puma concolor", img: "large (1).jpg", desc: "Gran felino solitario que se adapta tanto a las zonas altas como a la selva baja del parque.<br><br><strong>Dato Curioso:</strong> Tiene el mayor rango de distribución de cualquier mamífero terrestre en América. No puede rugir, pero sí ronronea.", categoria: "mamifero", sonido: "Sonido Puma.mp3" },
-            { id: 3, nombre: "MARIMONO", cientifico: "Ateles chamek", img: "ceb06c81-e99b-40fe-8863-b6e7bd666501.jpg", desc: "Primate de hábitos arborícolas que habita en el dosel de los bosques húmedos.<br><br><strong>Dato Curioso:</strong> Carecen de pulgares en sus manos, una adaptación evolutiva para balancearse a gran velocidad entre las ramas.", categoria: "mamifero", sonido: "Sonido Marimono.mp3" },
-            { id: 4, nombre: "TARUCA / VENADO ANDINO", cientifico: "Hippocamelus antisensis", img: "Diseno-sin-titulo-29.jpg", desc: "Ciervo corpulento que vive en grupos familiares en las escarpadas zonas altoandinas.<br><br><strong>Dato Curioso:</strong> Sus pezuñas están anatómicamente adaptadas para trepar y saltar sobre rocas resbaladizas sin perder el equilibrio.", categoria: "mamifero", sonido: "Sonido Siervos.mp3" },
-            { id: 5, nombre: "CHANCHO DE MONTE", cientifico: "Pecari tajacu", img: "chancho de monte 04.jpeg", desc: "Mamífero social que viaja en manadas buscando raíces y frutos caídos en el bosque.<br><br><strong>Dato Curioso:</strong> Tienen una glándula en la parte inferior de la espalda que segrega un olor almizclado muy fuerte.", categoria: "mamifero", sonido: "Sonido Cancho de monte.mp3" },
-            { id: 6, nombre: "PACARANA", cientifico: "Dinomys branickii", img: "pacarana__dinomys_branickii__no_zoologico_do_parque_ambiental_chico_mendes__rio_branco__.jpg", desc: "Roedor corpulento de movimientos lentos y pelaje marrón con rayas y manchas blancas.<br><br><strong>Dato Curioso:</strong> Es uno de los roedores más grandes del mundo y el único representante vivo de una antigua familia de gigantes.", categoria: "roedor", sonido: "Sonido Pacarana.mp3" },
-            { id: 7, nombre: "JOCHI COLORADO", cientifico: "Dasyprocta punctata", img: "507178952_9357785367656840_7279397495556188778_n.jpg", desc: "Roedor diurno muy ágil que habita en el sotobosque, alimentándose de semillas y nueces.<br><br><strong>Dato Curioso:</strong> Tiene la costumbre de enterrar semillas para comerlas después, pero suele olvidarlas, convirtiéndose en el mejor reforestador.", categoria: "roedor", sonido: "Sonido Jochi colorado.mp3" },
-            { id: 8, nombre: "MURCIÉLAGO HEMATÓFAGO", cientifico: "Desmodus rotundus", img: "muercielago.jpg", desc: "Murciélago que se alimenta exclusivamente de la sangre de mamíferos o aves.<br><br><strong>Dato Curioso:</strong> Su saliva contiene una proteína anticoagulante llamada 'draculina' que evita que la herida se cierre.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
-            { id: 9, nombre: "MURCIÉLAGO FRUGÍVORO", cientifico: "Phyllostomus hastatus", img: "large.jpg", desc: "Murciélago de gran tamaño esencial para la regeneración de la flora mediante la dispersión de semillas.<br><br><strong>Dato Curioso:</strong> Tienen un sistema de comunicación complejo; cada familia tiene su propio dialecto.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
-            { id: 10, nombre: "TITI", cientifico: "Saguinus spp.", img: "Portadas-Amazonas-MOno-TITI-LOW.jpg", desc: "Pequeños primates diurnos muy activos que se desplazan velozmente por la selva.<br><br><strong>Dato Curioso:</strong> Las hembras casi siempre dan a luz gemelos, y son los machos quienes asumen la mayor parte del cuidado.", categoria: "mamifero", sonido: "Sonido Mono Titi.mp3" },
-            { id: 11, nombre: "GATO DE PAJONAL", cientifico: "Leopardus tigrinus", img: "WhatsApp Image 2026-03-04 at 11.27.04.jpeg", desc: "Pequeños felinos silvestres sumamente esquivos que habitan en zonas de gran altitud y rocosas.<br><br><strong>Dato Curioso:</strong> El gato andino es considerado el fantasma de los Andes. Su larga cola le sirve como timón.", categoria: "mamifero", sonido: "Sonido Gato pajonal.mp3" },
-            { id: 12, nombre: "ZORRO ANDINO", cientifico: "Lycalopex culpaeus", img: "f28cba57-f446-4556-b2ae-5c264a530a9d.jpg", desc: "Cánido adaptable que regula las poblaciones de roedores en las zonas montañosas.<br><br><strong>Dato Curioso:</strong> A pesar de llamarse zorro, genéticamente pertenece a un grupo sudamericano más emparentado con los lobos.", categoria: "mamifero", sonido: "Sonido Zorro.mp3" },
-            { id: 13, nombre: "TUNQUI / GALLITO DE LAS ROCAS", cientifico: "Rupicola peruvianus", img: "TUNKI.jpg", desc: "Ave emblemática de los Yungas. Los machos poseen un plumaje rojo-anaranjado sumamente brillante.<br><br><strong>Dato Curioso:</strong> Los machos se reúnen en grupos llamados leks para hacer coreografías y emitir chasquidos extraños.", categoria: "ave", sonido: "Sonido Tunki.mp3" },
-            { id: 14, nombre: "CÓNDOR ANDINO", cientifico: "Vultur gryphus", img: "8d81c823-abdf-4c04-83fa-002611abb02f.jpg", desc: "Ave carroñera masiva que habita en las cumbres más altas de Cotapata.<br><br><strong>Dato Curioso:</strong> Puede planear cientos de kilómetros aprovechando las corrientes de aire térmicas sin tener que batir sus alas.", categoria: "ave", sonido: "Sonido Condor.mp3" },
-            { id: 15, nombre: "GUÁCHARO", cientifico: "Steatornis caripensis", img: "483359_10150947721041695_493434887_n.jpg", desc: "Habita en cuevas oscuras y sale de noche a buscar alimento en los árboles frutales.<br><br><strong>Dato Curioso:</strong> Es la única ave nocturna del mundo que se alimenta de frutas y utiliza la ecolocalización para navegar.", categoria: "ave", sonido: "Sonido Guácharo.mp3" },
-            { id: 16, nombre: "ÁGUILA NEGRA Y CASTAÑA", cientifico: "Spizaetus isidori", img: "aguilla negra.jpg", desc: "Poderoso depredador aéreo de los bosques nublados, clave para el equilibrio del ecosistema.<br><br><strong>Dato Curioso:</strong> Las crías nacen con plumaje blanco y tardan hasta 4 años en obtener el característico color negro y castaño.", categoria: "ave", sonido: "Sonido Aguila negra y castaña.mp3" },
-            { id: 17, nombre: "PAVA ANDINA", cientifico: "Penelope montagnii", img: "900.jpg", desc: "Ave de mediano tamaño que camina por las gruesas ramas de los árboles buscando bayas y hojas.<br><br><strong>Dato Curioso:</strong> En lugar de cantar para marcar territorio, los machos a menudo tamborean ruidosamente con sus alas.", categoria: "ave", sonido: "Sonido Pava andina.mp3" },
-            { id: 18, nombre: "PAVA ALA DE HOZ", cientifico: "Chamaepetes goudotii", img: "sickle_winged_guan-1.jpg", desc: "Suele moverse sigilosamente entre el espeso follaje de los estratos medios del bosque.<br><br><strong>Dato Curioso:</strong> Sus alas tienen plumas modificadas con forma de hoz que producen un fuerte silbido vibratorio.", categoria: "ave", sonido: "Sonido Pavo ala de hoz.mp3" },
-            { id: 19, nombre: "COLIBRÍ BOLIVIANO", cientifico: "Aglaeactis pamela", img: "WhatsApp Image 2026-03-04 at 11.23.32.jpeg", desc: "Pequeña ave de vuelo extremadamente rápido y preciso, vital para la polinización.<br><br><strong>Dato Curioso:</strong> Es una especie estrictamente endémica de Bolivia, no existe silvestre en ninguna otra parte.", categoria: "ave", sonido: "Sonido Colibri de sol boliviano.mp3" },
-            { id: 20, nombre: "REMOLINERA REAL", cientifico: "Cinclodes aricomae", img: "WhatsApp Image 2026-03-04 at 11.26.34.jpeg", desc: "Ave pequeña adaptada a los rigores de la puna, buscando insectos entre los troncos descascarados.<br><br><strong>Dato Curioso:</strong> Está en peligro crítico de extinción porque su supervivencia depende de los bosques de queñua.", categoria: "ave", sonido: "Sonido Remolina real.mp3" }
+            { nombre: "OSO ANDINO / JUCUMARI", nom_en: "ANDEAN BEAR", cientifico: "Tremarctos ornatus", img: "oso-frontino-2-1.jpg", desc: "Habita en los bosques nublados de Cotapata y es vital para la dispersión de semillas grandes.<br><br><strong>Dato Curioso:</strong> Es el único oso nativo de Sudamérica. Las manchas claras en su rostro y pecho son únicas en cada individuo.", desc_en: "Inhabits the cloud forests of Cotapata and is vital for dispersing large seeds.<br><br><strong>Fun Fact:</strong> It is the only bear native to South America. The light spots on its face and chest are unique to each individual.", categoria: "mamifero", sonido: "Sonido Oso jukumari.mp3" },
+            { nombre: "PUMA", nom_en: "COUGAR", cientifico: "Puma concolor", img: "large (1).jpg", desc: "Gran felino solitario que se adapta tanto a las zonas altas como a la selva baja del parque.<br><br><strong>Dato Curioso:</strong> Tiene el mayor rango de distribución de cualquier mamífero terrestre en América. No puede rugir, pero sí ronronea.", desc_en: "Large solitary feline that adapts to both the highlands and the lowland jungle of the park.<br><br><strong>Fun Fact:</strong> It has the largest range of any terrestrial mammal in the Americas. It cannot roar, but it purrs.", categoria: "mamifero", sonido: "Sonido Puma.mp3" },
+            { nombre: "MARIMONO", nom_en: "SPIDER MONKEY", cientifico: "Ateles chamek", img: "ceb06c81-e99b-40fe-8863-b6e7bd666501.jpg", desc: "Primate de hábitos arborícolas que habita en el dosel de los bosques húmedos.<br><br><strong>Dato Curioso:</strong> Carecen de pulgares en sus manos, una adaptación evolutiva para balancearse a gran velocidad.", desc_en: "Arboreal primate inhabiting the canopy of humid forests.<br><br><strong>Fun Fact:</strong> They lack thumbs on their hands, an evolutionary adaptation for swinging at high speeds.", categoria: "mamifero", sonido: "Sonido Marimono.mp3" },
+            { nombre: "TARUCA / VENADO ANDINO", nom_en: "TARUCA / ANDEAN DEER", cientifico: "Hippocamelus antisensis", img: "Diseno-sin-titulo-29.jpg", desc: "Ciervo corpulento que vive en grupos familiares en las escarpadas zonas altoandinas.<br><br><strong>Dato Curioso:</strong> Sus pezuñas están adaptadas para trepar rocas resbaladizas.", desc_en: "Stocky deer living in family groups in the steep high Andean areas.<br><br><strong>Fun Fact:</strong> Its hooves are specially adapted to climb slippery rocks.", categoria: "mamifero", sonido: "Sonido Siervos.mp3" },
+            { nombre: "CHANCHO DE MONTE", nom_en: "COLLARED PECCARY", cientifico: "Pecari tajacu", img: "chancho de monte 04.jpeg", desc: "Mamífero social que viaja en manadas buscando raíces y frutos caídos.<br><br><strong>Dato Curioso:</strong> Segrega un olor almizclado muy fuerte para comunicarse.", desc_en: "Social mammal that travels in herds looking for roots and fallen fruit.<br><br><strong>Fun Fact:</strong> It secretes a very strong musky odor to communicate with the herd.", categoria: "mamifero", sonido: "Sonido Cancho de monte.mp3" },
+            { nombre: "PACARANA", nom_en: "PACARANA", cientifico: "Dinomys branickii", img: "pacarana__dinomys_branickii__no_zoologico_do_parque_ambiental_chico_mendes__rio_branco__.jpg", desc: "Roedor corpulento de movimientos lentos y pelaje marrón con rayas blancas.<br><br><strong>Dato Curioso:</strong> Es el único representante vivo de una antigua familia de roedores gigantes.", desc_en: "Large, slow-moving rodent with brown fur and white stripes.<br><br><strong>Fun Fact:</strong> It is the only living representative of an ancient family of giant rodents.", categoria: "roedor", sonido: "Sonido Pacarana.mp3" },
+            { nombre: "JOCHI COLORADO", nom_en: "CENTRAL AMERICAN AGOUTI", cientifico: "Dasyprocta punctata", img: "507178952_9357785367656840_7279397495556188778_n.jpg", desc: "Roedor diurno muy ágil que habita en el sotobosque.<br><br><strong>Dato Curioso:</strong> Entierra semillas pero suele olvidarlas, convirtiéndose en el mejor reforestador.", desc_en: "Agile diurnal rodent inhabiting the understory.<br><br><strong>Fun Fact:</strong> It buries seeds to eat later but often forgets them, becoming the best natural reforester.", categoria: "roedor", sonido: "Sonido Jochi colorado.mp3" },
+            { nombre: "MURCIÉLAGO HEMATÓFAGO", nom_en: "VAMPIRE BAT", cientifico: "Desmodus rotundus", img: "muercielago.jpg", desc: "Murciélago que se alimenta exclusivamente de la sangre de mamíferos o aves.<br><br><strong>Dato Curioso:</strong> Su saliva contiene una proteína anticoagulante llamada 'draculina'.", desc_en: "Bat that feeds exclusively on the blood of mammals or birds.<br><br><strong>Fun Fact:</strong> Its saliva contains an anticoagulant protein called 'draculin'.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
+            { nombre: "MURCIÉLAGO FRUGÍVORO", nom_en: "FRUIT BAT", cientifico: "Phyllostomus hastatus", img: "large.jpg", desc: "Murciélago esencial para la dispersión de semillas.<br><br><strong>Dato Curioso:</strong> Tienen un sistema de comunicación complejo; cada familia tiene su propio dialecto.", desc_en: "Large bat essential for seed dispersal.<br><br><strong>Fun Fact:</strong> They have a complex communication system; each family has its own dialect.", categoria: "mamifero", sonido: "Sonido Murcielago.mp3" },
+            { nombre: "TITI", nom_en: "TAMARIN MONKEY", cientifico: "Saguinus spp.", img: "Portadas-Amazonas-MOno-TITI-LOW.jpg", desc: "Pequeños primates diurnos muy activos.<br><br><strong>Dato Curioso:</strong> Las hembras casi siempre dan a luz gemelos, y los machos asumen el cuidado principal.", desc_en: "Small, very active diurnal primates.<br><br><strong>Fun Fact:</strong> Females almost always give birth to twins, and males take on the primary caregiving.", categoria: "mamifero", sonido: "Sonido Mono Titi.mp3" },
+            { nombre: "GATO DE PAJONAL", nom_en: "PAMPAS CAT", cientifico: "Leopardus tigrinus", img: "WhatsApp Image 2026-03-04 at 11.27.04.jpeg", desc: "Pequeños felinos silvestres sumamente esquivos.<br><br><strong>Dato Curioso:</strong> Es considerado el fantasma de los Andes.", desc_en: "Extremely elusive small wild cats.<br><br><strong>Fun Fact:</strong> It is often considered the ghost of the Andes mountains.", categoria: "mamifero", sonido: "Sonido Gato pajonal.mp3" },
+            { nombre: "ZORRO ANDINO", nom_en: "ANDEAN FOX", cientifico: "Lycalopex culpaeus", img: "f28cba57-f446-4556-b2ae-5c264a530a9d.jpg", desc: "Cánido adaptable que regula las poblaciones de roedores.<br><br><strong>Dato Curioso:</strong> Genéticamente está más emparentado con los lobos que con los zorros.", desc_en: "Adaptable canid that regulates rodent populations.<br><br><strong>Fun Fact:</strong> Genetically, it is more closely related to wolves than to true foxes.", categoria: "mamifero", sonido: "Sonido Zorro.mp3" },
+            { nombre: "TUNQUI", nom_en: "ANDEAN COCK-OF-THE-ROCK", cientifico: "Rupicola peruvianus", img: "TUNKI.jpg", desc: "Ave emblemática de los Yungas. Los machos poseen un plumaje rojo-anaranjado brillante.<br><br><strong>Dato Curioso:</strong> Los machos se reúnen para hacer coreografías y atraer hembras.", desc_en: "Emblematic bird of the Yungas. Males have brilliant orange-red plumage.<br><br><strong>Fun Fact:</strong> Males gather in groups called leks to perform dances and attract females.", categoria: "ave", sonido: "Sonido Tunki.mp3" },
+            { nombre: "CÓNDOR ANDINO", nom_en: "ANDEAN CONDOR", cientifico: "Vultur gryphus", img: "8d81c823-abdf-4c04-83fa-002611abb02f.jpg", desc: "Ave carroñera masiva de las cumbres altas.<br><br><strong>Dato Curioso:</strong> Puede planear cientos de kilómetros aprovechando las corrientes térmicas.", desc_en: "Massive scavenging bird of the high peaks.<br><br><strong>Fun Fact:</strong> It can glide for hundreds of kilometers using thermal air currents without flapping.", categoria: "ave", sonido: "Sonido Condor.mp3" },
+            { nombre: "GUÁCHARO", nom_en: "OILBIRD", cientifico: "Steatornis caripensis", img: "483359_10150947721041695_493434887_n.jpg", desc: "Habita en cuevas oscuras y sale de noche a buscar frutas.<br><br><strong>Dato Curioso:</strong> Es la única ave nocturna frugívora que usa ecolocalización.", desc_en: "Inhabits dark caves and emerges at night to search for fruit.<br><br><strong>Fun Fact:</strong> It is the only nocturnal fruit-eating bird in the world that uses echolocation.", categoria: "ave", sonido: "Sonido Guácharo.mp3" },
+            { nombre: "ÁGUILA NEGRA Y CASTAÑA", nom_en: "BLACK-AND-CHESTNUT EAGLE", cientifico: "Spizaetus isidori", img: "aguilla negra.jpg", desc: "Poderoso depredador aéreo de los bosques nublados.<br><br><strong>Dato Curioso:</strong> Las crías nacen con plumaje blanco y tardan hasta 4 años en oscurecer.", desc_en: "Powerful aerial predator of the cloud forests.<br><br><strong>Fun Fact:</strong> Chicks are born with white plumage and take up to 4 years to darken.", categoria: "ave", sonido: "Sonido Aguila negra y castaña.mp3" },
+            { nombre: "PAVA ANDINA", nom_en: "ANDEAN GUAN", cientifico: "Penelope montagnii", img: "900.jpg", desc: "Ave de mediano tamaño que busca bayas y hojas.<br><br><strong>Dato Curioso:</strong> Los machos tamborean ruidosamente con sus alas para marcar territorio.", desc_en: "Medium-sized bird searching for berries and leaves.<br><br><strong>Fun Fact:</strong> Males drum loudly with their wings to mark territory instead of singing.", categoria: "ave", sonido: "Sonido Pava andina.mp3" },
+            { nombre: "PAVA ALA DE HOZ", nom_en: "SICKLE-WINGED GUAN", cientifico: "Chamaepetes goudotii", img: "sickle_winged_guan-1.jpg", desc: "Se mueve sigilosamente entre el espeso follaje.<br><br><strong>Dato Curioso:</strong> Sus alas tienen plumas modificadas con forma de hoz.", desc_en: "Moves stealthily through thick foliage.<br><br><strong>Fun Fact:</strong> Its wings have modified sickle-shaped feathers that produce a vibrating whistle.", categoria: "ave", sonido: "Sonido Pavo ala de hoz.mp3" },
+            { nombre: "COLIBRÍ BOLIVIANO", nom_en: "BOLIVIAN SUNBEAM", cientifico: "Aglaeactis pamela", img: "WhatsApp Image 2026-03-04 at 11.23.32.jpeg", desc: "Pequeña ave de vuelo extremadamente rápido.<br><br><strong>Dato Curioso:</strong> Es estrictamente endémica de Bolivia.", desc_en: "Small bird with extremely fast flight.<br><br><strong>Fun Fact:</strong> It is strictly endemic to Bolivia; it exists nowhere else in the wild.", categoria: "ave", sonido: "Sonido Colibri de sol boliviano.mp3" },
+            { nombre: "REMOLINERA REAL", nom_en: "ROYAL CINCLODES", cientifico: "Cinclodes aricomae", img: "WhatsApp Image 2026-03-04 at 11.26.34.jpeg", desc: "Ave pequeña adaptada a los rigores de la puna.<br><br><strong>Dato Curioso:</strong> Está en peligro crítico de extinción porque depende de los bosques de queñua.", desc_en: "Small bird adapted to the harsh conditions of the puna.<br><br><strong>Fun Fact:</strong> Critically endangered because its survival depends entirely on Queñua forests.", categoria: "ave", sonido: "Sonido Remolina real.mp3" }
         ];
 
         const baseDatosFlora = [
-            { id: 21, nombre: "PASTO ALTOANDINO", cientifico: "Festuca dolichophylla", img: "festuca-dolichophylla.jpg", desc: "Hierba resistente típica de la puna que forma densos manojos dorados.<br><br><strong>Dato Curioso:</strong> Sus raíces son tan profundas que funcionan como una malla natural, evitando la erosión del suelo." },
-            { id: 22, nombre: "GRAMÍNEAS ALTOANDINAS", cientifico: "Cinnagrostis spp.", img: "Cinnagrostisspp.jpg", desc: "Vegetación herbácea que domina los paisajes abiertos de las zonas frías del parque.<br><br><strong>Dato Curioso:</strong> Contienen cristales de sílice en sus hojas, lo que las hace duras y ásperas, protegiéndolas del frío." },
-            { id: 23, nombre: "BOFEDAL", cientifico: "Distichia muscoides", img: "Distichia_muscoides_2.jpg", desc: "Especie que forma ecosistemas de humedales en la altura, vitales para retener agua.<br><br><strong>Dato Curioso:</strong> Crece formando cojines tan densos que un animal pesado puede caminar sobre ellos sin hundirse." },
-            { id: 24, nombre: "BOFEDAL DE HOJA TUBULAR", cientifico: "Plantago tubuloso", img: "Plantago tubulosa.jpg", desc: "Pequeña planta de los humedales de altura adaptada a vivir con sus raíces sumergidas.<br><br><strong>Dato Curioso:</strong> Sus raíces actúan como un poderoso filtro natural, absorbiendo metales pesados y purificando el agua." },
-            { id: 25, nombre: "BOFEDAL ESPINOSO", cientifico: "Oxychloe andina", img: "Oxychloe.jpg", desc: "Planta formadora de cojines duros en los ecosistemas húmedos altoandinos.<br><br><strong>Dato Curioso:</strong> Las puntas de sus pequeñas hojas terminan en espinas muy afiladas para evitar ser devorada." },
-            { id: 26, nombre: "QUEÑUA", cientifico: "Polylepis pepei", img: "Polylepis pepei.jpg", desc: "Árbol retorcido que forma pequeños bosques en las faldas rocosas de las montañas frías.<br><br><strong>Dato Curioso:</strong> Es uno de los árboles que crece a mayor altitud. Su corteza se descama para crear aislamiento térmico." },
-            { id: 27, nombre: "PINO DE MONTE", cientifico: "Podocarpus rusbyi", img: "Podocarpusrusbyi.jpg", desc: "Gran conífera nativa que domina las partes altas de los bosques nublados de Cotapata.<br><br><strong>Dato Curioso:</strong> A diferencia de los pinos norteamericanos, produce unos curiosos conos carnosos que atraen a las aves." },
-            { id: 28, nombre: "PINO DE MONTE INGENSIS", cientifico: "Podocarpus ingensis", img: "Podocarpus ingensis.jpg", desc: "Otra especie de conífera andina, fundamental para la retención de neblina.<br><br><strong>Dato Curioso:</strong> Su madera contiene resinas que la hacen tan resistente a hongos que se usaba para construir puentes." },
-            { id: 29, nombre: "IOTAVIO", cientifico: "Weinmannia boliviensis", img: "Weinmanniaboliviensis.jpg", desc: "Árbol frondoso característico del bosque de ceja de monte y Yungas.<br><br><strong>Dato Curioso:</strong> Juega el papel de cosechador de agua; sus hojas atrapan gotas de niebla y las canalizan hacia el suelo." },
-            { id: 30, nombre: "HUAYCHA", cientifico: "Weinmannia crassifolia", img: "Weinmannia_pinnata_1.jpg", desc: "Especie arbórea de ramas gruesas y hojas coriáceas que resisten los fuertes vientos.<br><br><strong>Dato Curioso:</strong> Produce una resina natural pegajosa que aves e insectos usan como pegamento biológico para nidos." },
-            { id: 31, nombre: "NOGAL", cientifico: "Juglans boliviana", img: "NOGAL.jpg", desc: "Árbol imponente de madera oscura que se encuentra en las partes más cálidas del parque.<br><br><strong>Dato Curioso:</strong> Produce unas nueces esféricas cubiertas de cáscara muy dura que tiñen el suelo de negro al caer." },
-            { id: 32, nombre: "YURAJ HUAYCHA", cientifico: "Miconia theaezans", img: "Miconia theaezans.jpg", desc: "Arbusto o árbol pequeño de hojas llamativas que crece en claros del bosque.<br><br><strong>Dato Curioso:</strong> Produce floraciones explosivas con cientos de flores simultáneamente, atrayendo muchos colibríes." },
-            { id: 33, nombre: "CEDRO", cientifico: "Cedrela lilloi", img: "Cedrela_odorata_foliage.jpg", desc: "Especie maderable muy valorada que forma parte del dosel del bosque montano.<br><br><strong>Dato Curioso:</strong> Su madera emite un aroma aceitoso que funciona como un insecticida natural perfecto, repeliendo termitas." },
-            { id: 34, nombre: "ALISO", cientifico: "Alnus acuminata", img: "acuminata.jpg", desc: "Árbol pionero que crece rápidamente a las orillas de los ríos y zonas de deslizamientos.<br><br><strong>Dato Curioso:</strong> Hace simbiosis con bacterias para fijar nitrógeno directo a la tierra, actuando como fertilizante vivo." },
-            { id: 35, nombre: "YARUMA", cientifico: "Hesperomeles ferruginea", img: "Hesperomelesferruginea.jpg", desc: "Árbol de tamaño medio con hojas cubiertas de unos pelillos que le dan un tono rojizo.<br><br><strong>Dato Curioso:</strong> Pertenece a la misma familia botánica que las manzanas y las rosas." },
-            { id: 36, nombre: "ALISO COLORADO", cientifico: "Myrica pubescens", img: "Myricapubescens.jpg", desc: "Arbusto perenne que crece en las laderas y soporta suelos relativamente pobres.<br><br><strong>Dato Curioso:</strong> Sus pequeños frutos están cubiertos por una cera natural que los pájaros comen para obtener energía rápida." },
-            { id: 37, nombre: "LAURELES", cientifico: "Ocotea spp.", img: "Ocotea.jpg", desc: "Árboles robustos cuyas flores y frutos nutren a muchas especies de tucanes y roedores.<br><br><strong>Dato Curioso:</strong> Si aplastas sus hojas, liberan un olor fuerte y picante, a menudo similar al de la canela." },
-            { id: 38, nombre: "QUINA", cientifico: "Cinchona officinalis", img: "Cinchonaofficinalis.jpg", desc: "Árbol legendario originario de los bosques andinos, reconocido a nivel mundial.<br><br><strong>Dato Curioso:</strong> De su corteza se extrae la quinina, que fue durante siglos la única cura conocida para la malaria." },
-            { id: 39, nombre: "BILKA", cientifico: "Anadenanthera colubrina", img: "Anadenantheracolubrina.jpg", desc: "Árbol de las tierras bajas de Cotapata, de corteza rugosa y vainas largas.<br><br><strong>Dato Curioso:</strong> Las semillas de sus vainas han sido utilizadas durante miles de años en ceremonias andinas." },
-            { id: 40, nombre: "FLOR ENDÉMICA", cientifico: "Ourisia cotapatensis", img: "Ourisiacotapatensis.jpg", desc: "Pequeña planta herbácea con flores que crece en los hábitats de mayor altitud.<br><br><strong>Dato Curioso:</strong> Es un testimonio de inmensa biodiversidad; fue descubierta para la ciencia apenas en 2003." }
+            { nombre: "PASTO ALTOANDINO", nom_en: "HIGH ANDEAN GRASS", cientifico: "Festuca dolichophylla", img: "festuca-dolichophylla.jpg", desc: "Forma densos manojos dorados.<br><br><strong>Dato Curioso:</strong> Sus raíces evitan la erosión del suelo.", desc_en: "Forms dense golden bunches.<br><br><strong>Fun Fact:</strong> Its deep roots act as a natural net preventing soil erosion." },
+            { nombre: "GRAMÍNEAS", nom_en: "ANDEAN GRASSES", cientifico: "Cinnagrostis spp.", img: "Cinnagrostisspp.jpg", desc: "Vegetación que domina paisajes fríos.<br><br><strong>Dato Curioso:</strong> Contienen cristales de sílice para protegerse del frío.", desc_en: "Vegetation dominating cold landscapes.<br><br><strong>Fun Fact:</strong> They contain silica crystals making them tough against the cold." },
+            { nombre: "BOFEDAL", nom_en: "WETLAND CUSHION", cientifico: "Distichia muscoides", img: "Distichia_muscoides_2.jpg", desc: "Humedales vitales para retener agua.<br><br><strong>Dato Curioso:</strong> Crece formando cojines tan densos que soportan peso sin hundirse.", desc_en: "Vital wetlands for water retention.<br><br><strong>Fun Fact:</strong> Grows in cushions so dense that heavy animals can walk on them." },
+            { nombre: "BOFEDAL TUBULAR", nom_en: "TUBULAR WETLAND PLANT", cientifico: "Plantago tubuloso", img: "Plantago tubulosa.jpg", desc: "Planta adaptada a vivir sumergida.<br><br><strong>Dato Curioso:</strong> Filtra metales pesados y purifica el agua.", desc_en: "Plant adapted to live submerged.<br><br><strong>Fun Fact:</strong> It acts as a powerful natural filter, absorbing heavy metals." },
+            { nombre: "BOFEDAL ESPINOSO", nom_en: "THORNY WETLAND PLANT", cientifico: "Oxychloe andina", img: "Oxychloe.jpg", desc: "Formadora de cojines duros.<br><br><strong>Dato Curioso:</strong> Sus hojas terminan en espinas afiladas para no ser devoradas.", desc_en: "Hard cushion-forming plant.<br><br><strong>Fun Fact:</strong> The tips of its leaves end in sharp spines to avoid being eaten." },
+            { nombre: "QUEÑUA", nom_en: "QUEÑUA TREE", cientifico: "Polylepis pepei", img: "Polylepis pepei.jpg", desc: "Árbol retorcido de montañas frías.<br><br><strong>Dato Curioso:</strong> Su corteza se descama como papel para aislarse del frío.", desc_en: "Twisted tree of cold mountains.<br><br><strong>Fun Fact:</strong> Its bark peels off like paper to create thermal insulation." },
+            { nombre: "PINO DE MONTE", nom_en: "MOUNTAIN PINE", cientifico: "Podocarpus rusbyi", img: "Podocarpusrusbyi.jpg", desc: "Conífera de los bosques nublados.<br><br><strong>Dato Curioso:</strong> Produce conos carnosos que atraen a las aves.", desc_en: "Conifer of the cloud forests.<br><br><strong>Fun Fact:</strong> Unlike northern pines, it produces fleshy cones that attract birds." },
+            { nombre: "PINO INGENSIS", nom_en: "INGENSIS PINE", cientifico: "Podocarpus ingensis", img: "Podocarpus ingensis.jpg", desc: "Conífera andina.<br><br><strong>Dato Curioso:</strong> Su madera tiene resinas resistentes a hongos, usada en puentes.", desc_en: "Andean conifer.<br><br><strong>Fun Fact:</strong> Its wood contains resins so resistant to fungi it was used for bridges." },
+            { nombre: "IOTAVIO", nom_en: "IOTAVIO TREE", cientifico: "Weinmannia boliviensis", img: "Weinmanniaboliviensis.jpg", desc: "Árbol frondoso de los Yungas.<br><br><strong>Dato Curioso:</strong> Sus hojas atrapan la niebla y la canalizan como agua al suelo.", desc_en: "Leafy tree of the Yungas.<br><br><strong>Fun Fact:</strong> Acts as a water harvester; leaves trap fog drops and channel them down." },
+            { nombre: "HUAYCHA", nom_en: "HUAYCHA", cientifico: "Weinmannia crassifolia", img: "Weinmannia_pinnata_1.jpg", desc: "Ramas gruesas que resisten vientos.<br><br><strong>Dato Curioso:</strong> Su resina es usada por aves como pegamento para nidos.", desc_en: "Thick branches resisting winds.<br><br><strong>Fun Fact:</strong> Produces a sticky resin used by birds as biological glue for nests." },
+            { nombre: "NOGAL", nom_en: "BOLIVIAN WALNUT", cientifico: "Juglans boliviana", img: "NOGAL.jpg", desc: "Imponente árbol de madera oscura.<br><br><strong>Dato Curioso:</strong> Sus nueces tiñen el suelo de negro al caer.", desc_en: "Imposing dark wood tree.<br><br><strong>Fun Fact:</strong> Produces spherical nuts with a hard shell that dye the ground black." },
+            { nombre: "YURAJ HUAYCHA", nom_en: "YURAJ HUAYCHA", cientifico: "Miconia theaezans", img: "Miconia theaezans.jpg", desc: "Arbusto de flores llamativas.<br><br><strong>Dato Curioso:</strong> Sus floraciones explosivas atraen a decenas de colibríes.", desc_en: "Shrub with striking flowers.<br><br><strong>Fun Fact:</strong> Produces explosive blooms with hundreds of flowers, attracting hummingbirds." },
+            { nombre: "CEDRO", nom_en: "ANDEAN CEDAR", cientifico: "Cedrela lilloi", img: "Cedrela_odorata_foliage.jpg", desc: "Madera valorada del dosel.<br><br><strong>Dato Curioso:</strong> Su aroma repele a los insectos y termitas.", desc_en: "Valued canopy wood.<br><br><strong>Fun Fact:</strong> Its wood emits an oily scent acting as a perfect natural insecticide." },
+            { nombre: "ALISO", nom_en: "ANDEAN ALDER", cientifico: "Alnus acuminata", img: "acuminata.jpg", desc: "Crece a orillas de los ríos.<br><br><strong>Dato Curioso:</strong> Fija nitrógeno a la tierra, actuando como fertilizante vivo.", desc_en: "Grows on riverbanks.<br><br><strong>Fun Fact:</strong> Lives in symbiosis with bacteria to fix nitrogen, acting as live fertilizer." },
+            { nombre: "YARUMA", nom_en: "YARUMA", cientifico: "Hesperomeles ferruginea", img: "Hesperomelesferruginea.jpg", desc: "Hojas con pelillos rojizos.<br><br><strong>Dato Curioso:</strong> Pertenece a la familia de las manzanas y rosas.", desc_en: "Leaves with reddish hairs.<br><br><strong>Fun Fact:</strong> Belongs to the same botanical family as apples and roses." },
+            { nombre: "ALISO COLORADO", nom_en: "RED WAX MYRTLE", cientifico: "Myrica pubescens", img: "Myricapubescens.jpg", desc: "Soporta suelos pobres.<br><br><strong>Dato Curioso:</strong> Sus frutos tienen una cera que da energía rápida a las aves.", desc_en: "Tolerates poor soils.<br><br><strong>Fun Fact:</strong> Its small fruits are covered by a natural wax eaten by birds for energy." },
+            { nombre: "LAURELES", nom_en: "ANDEAN LAUREL", cientifico: "Ocotea spp.", img: "Ocotea.jpg", desc: "Nutre a especies de tucanes.<br><br><strong>Dato Curioso:</strong> Si aplastas sus hojas, huelen a canela picante.", desc_en: "Nourishes toucan species.<br><br><strong>Fun Fact:</strong> Crushing its leaves releases a strong, spicy scent similar to cinnamon." },
+            { nombre: "QUINA", nom_en: "QUININE TREE", cientifico: "Cinchona officinalis", img: "Cinchonaofficinalis.jpg", desc: "Árbol legendario originario de los Andes.<br><br><strong>Dato Curioso:</strong> De aquí se extrae la quinina, histórica cura para la malaria.", desc_en: "Legendary tree from the Andes.<br><br><strong>Fun Fact:</strong> Quinine is extracted from its bark, the historical cure for malaria." },
+            { nombre: "BILKA", nom_en: "BILKA TREE", cientifico: "Anadenanthera colubrina", img: "Anadenantheracolubrina.jpg", desc: "Corteza rugosa y vainas largas.<br><br><strong>Dato Curioso:</strong> Sus semillas se han usado en ceremonias andinas milenarias.", desc_en: "Rough bark and long pods.<br><br><strong>Fun Fact:</strong> Seeds from its pods have been used for thousands of years in Andean ceremonies." },
+            { nombre: "FLOR ENDÉMICA", nom_en: "ENDEMIC FLOWER", cientifico: "Ourisia cotapatensis", img: "Ourisiacotapatensis.jpg", desc: "Crece a gran altitud.<br><br><strong>Dato Curioso:</strong> Descubierta para la ciencia apenas en 2003.", desc_en: "Grows at high altitudes.<br><br><strong>Fun Fact:</strong> It's a testament to biodiversity; discovered by science only in 2003." }
         ];
 
-        // --- LÓGICA DE INTERFAZ ---
+        // --- 4. TRADUCTOR Y GENERADOR DE UI ---
+        const textosUI = {
+            es: {
+                btnComenzar: "🚀 Comenzar Aventura", tituloApp: "Cotapata: Guía", btnIdioma: "🌐 Cambiar a Inglés (EN)",
+                btnGuia: "🎒 Guía de Ruta", btnEquipo: "👥 Nuestro Equipo", tabFauna: "🐾 Fauna", tabFlora: "🌿 Flora",
+                filtroTodas: "✨ Todas", filtroMamifero: "🦊 Mamíferos", filtroAves: "🐦 Aves", filtroRoedor: "🐭 Roedores",
+                escuchar: "🔊 Escuchar Guía", sonidoReal: "🐾 Sonido Real",
+                guiaTitulo: "🎒 Guía de Supervivencia",
+                guiaHtml: `
+                    <div class="accordion-item active" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">⚠️ Primeros Auxilios <span>▼</span></div>
+                        <div class="accordion-content"><strong>Picadura:</strong> Lave la zona. No frote.<br><br><strong>Sorojchi:</strong> Descanse, beba té de coca. Descienda si empeora.</div>
+                    </div>
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">🐆 Seguridad <span>▼</span></div>
+                        <div class="accordion-content"><strong>Avistamiento Puma:</strong> No corra. Hágase grande. Hable fuerte.</div>
+                    </div>
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">🎒 Mochila <span>▼</span></div>
+                        <div class="accordion-content">Agua (2L), protector solar, poncho, silbato, mapa.</div>
+                    </div>`,
+                equipoTitulo: "👥 Nuestro Equipo",
+                equipoHtml: `
+                    <div style="text-align:center; margin-bottom:15px;">
+                        <span class="team-subtitle">Desarrollado por</span><br>
+                        <strong>Estudiantes de Ingeniería de Sistemas</strong>
+                    </div>
+                    <ul class="team-list">
+                        <li>Casilla Callancho Eddy</li>
+                        <li>Alba Lopez Pablo A.</li>
+                        <li>Chipana Mamani Andrea M.</li>
+                        <li>Nina Villca Juan G.</li>
+                        <li>Mujica Capquique Freddy F.</li>
+                        <li>Riveros Gamboa Fabiana E.</li>
+                        <li>Huanca Chambi Ruddy A.</li>
+                        <li>Machaca Quispe Jonathan R.</li>
+                    </ul>`
+            },
+            en: {
+                btnComenzar: "🚀 Start Adventure", tituloApp: "Cotapata: Guide", btnIdioma: "🌐 Switch to Spanish (ES)",
+                btnGuia: "🎒 Survival Guide", btnEquipo: "👥 Our Team", tabFauna: "🐾 Fauna", tabFlora: "🌿 Flora",
+                filtroTodas: "✨ All", filtroMamifero: "🦊 Mammals", filtroAves: "🐦 Birds", filtroRoedor: "🐭 Rodents",
+                escuchar: "🔊 Listen to Guide", sonidoReal: "🐾 Real Sound",
+                guiaTitulo: "🎒 Survival Guide",
+                guiaHtml: `
+                    <div class="accordion-item active" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">⚠️ First Aid <span>▼</span></div>
+                        <div class="accordion-content"><strong>Bite:</strong> Wash area. Do not rub.<br><br><strong>Altitude Sickness:</strong> Rest, drink coca tea. Descend if it worsens.</div>
+                    </div>
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">🐆 Safety <span>▼</span></div>
+                        <div class="accordion-content"><strong>Cougar Sighting:</strong> Do not run. Make yourself big. Speak loudly.</div>
+                    </div>
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">🎒 Backpack <span>▼</span></div>
+                        <div class="accordion-content">Water (2L), sunscreen, poncho, whistle, map.</div>
+                    </div>`,
+                equipoTitulo: "👥 Our Team",
+                equipoHtml: `
+                    <div style="text-align:center; margin-bottom:15px;">
+                        <span class="team-subtitle">Developed by</span><br>
+                        <strong>Systems Engineering Students</strong>
+                    </div>
+                    <ul class="team-list">
+                        <li>Casilla Callancho Eddy</li>
+                        <li>Alba Lopez Pablo A.</li>
+                        <li>Chipana Mamani Andrea M.</li>
+                        <li>Nina Villca Juan G.</li>
+                        <li>Mujica Capquique Freddy F.</li>
+                        <li>Riveros Gamboa Fabiana E.</li>
+                        <li>Huanca Chambi Ruddy A.</li>
+                        <li>Machaca Quispe Jonathan R.</li>
+                    </ul>`
+            }
+        };
+
+        function cambiarIdioma() {
+            idiomaActual = (idiomaActual === 'es') ? 'en' : 'es';
+            let t = textosUI[idiomaActual];
+            
+            document.getElementById('ui-btn-comenzar').innerText = t.btnComenzar;
+            document.getElementById('ui-titulo-app').innerText = t.tituloApp;
+            document.getElementById('ui-btn-idioma').innerText = t.btnIdioma;
+            document.getElementById('ui-btn-guia').innerText = t.btnGuia;
+            document.getElementById('ui-btn-equipo').innerText = t.btnEquipo;
+            document.getElementById('ui-tab-fauna').innerText = t.tabFauna;
+            document.getElementById('ui-tab-flora').innerText = t.tabFlora;
+            document.getElementById('ui-filtro-todas').innerText = t.filtroTodas;
+            document.getElementById('ui-filtro-mamiferos').innerText = t.filtroMamifero;
+            document.getElementById('ui-filtro-aves').innerText = t.filtroAves;
+            document.getElementById('ui-filtro-roedores').innerText = t.filtroRoedor;
+            document.getElementById('ui-btn-escuchar').innerText = t.escuchar;
+            document.getElementById('ui-btn-sonido').innerText = t.sonidoReal;
+            
+            cerrarMenu();
+            renderizarTarjetas(); 
+        }
+
+        // --- 5. LÓGICA DE INTERFAZ PRINCIPAL ---
         function mostrarSeccion(id, btn) {
             let secciones = document.querySelectorAll('.content-section');
-            for(let i = 0; i < secciones.length; i++) {
-                secciones[i].classList.remove('active');
-            }
-            
+            for(let i=0; i<secciones.length; i++) secciones[i].classList.remove('active');
             let botones = document.querySelectorAll('.menu-btn');
-            for(let j = 0; j < botones.length; j++) {
-                botones[j].classList.remove('active');
-            }
-            
+            for(let j=0; j<botones.length; j++) botones[j].classList.remove('active');
             document.getElementById(id).classList.add('active');
             btn.classList.add('active');
-            
-            let faunaTools = document.getElementById('fauna-tools');
-            if (id === 'fauna') {
-                faunaTools.style.display = 'block';
-            } else {
-                faunaTools.style.display = 'none';
-            }
+            document.getElementById('fauna-tools').style.display = (id === 'fauna') ? 'block' : 'none';
         }
 
         function filtrarCategoria(cat, btn) {
             let botones = document.querySelectorAll('.pill-btn');
-            for(let k = 0; k < botones.length; k++) {
-                botones[k].classList.remove('active');
-            }
+            for(let k=0; k<botones.length; k++) botones[k].classList.remove('active');
             btn.classList.add('active');
             
             let tarjetas = document.getElementById('grid-fauna').children;
-            for (let i = 0; i < tarjetas.length; i++) {
-                let coincide = 0;
-                if (cat === 'todo') {
-                    coincide = 1;
-                } else if (baseDatosFauna[i].categoria === cat) {
-                    coincide = 1;
-                }
-                
-                if (coincide === 1) {
-                    tarjetas[i].style.display = 'block';
-                } else {
-                    tarjetas[i].style.display = 'none';
-                }
+            for (let i=0; i<tarjetas.length; i++) {
+                let coincide = (cat === 'todo' || baseDatosFauna[i].categoria === cat) ? 1 : 0;
+                tarjetas[i].style.display = (coincide === 1) ? 'block' : 'none';
             }
         }
 
-        function abrirModal(datos, esFlora) {
-            let overlay = document.getElementById('modal');
-            document.getElementById('modal-titulo').innerText = datos.nombre;
+        // Modales
+        function abrirModalAnimal(datos, esFlora) {
+            // Cerrar menú si está abierto
+            cerrarMenu();
+            
+            let overlay = document.getElementById('modal-animal');
+            document.getElementById('modal-titulo').innerText = (idiomaActual === 'es') ? datos.nombre : datos.nom_en;
             document.getElementById('modal-cientifico').innerText = datos.cientifico;
-            document.getElementById('modal-descripcion').innerHTML = datos.desc;
+            document.getElementById('modal-descripcion').innerHTML = (idiomaActual === 'es') ? datos.desc : datos.desc_en;
             
-            overlay.style.backgroundImage = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('" + datos.img + "')";
-            
-            let rowSonidoAnimal = document.getElementById('row-sonido-animal');
-            if (esFlora === 1) {
-                rowSonidoAnimal.style.display = 'none';
-            } else {
-                rowSonidoAnimal.style.display = 'flex';
-                document.getElementById('audio-animal').src = datos.sonido;
-            }
+            overlay.style.backgroundImage = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9)), url('" + datos.img + "')";
+            document.getElementById('row-sonido-animal').style.display = (esFlora === 1) ? 'none' : 'flex';
+            if(esFlora === 0) document.getElementById('audio-animal').src = datos.sonido;
             
             overlay.classList.add('active');
         }
 
-        function cerrarModal() { 
-            document.getElementById('modal').classList.remove('active'); 
-            window.speechSynthesis.cancel(); 
-            document.getElementById('audio-animal').pause(); 
+        function abrirModalExtra(tipo) {
+            cerrarMenu();
+            let overlay = document.getElementById('modal-extra');
+            let t = textosUI[idiomaActual];
+            
+            if (tipo === 'guia') {
+                document.getElementById('modal-extra-titulo').innerText = t.guiaTitulo;
+                document.getElementById('modal-extra-contenido').innerHTML = t.guiaHtml;
+            } else if (tipo === 'equipo') {
+                document.getElementById('modal-extra-titulo').innerText = t.equipoTitulo;
+                document.getElementById('modal-extra-contenido').innerHTML = t.equipoHtml;
+            }
+            overlay.classList.add('active');
         }
 
-        function checkCerrarModal(e) { 
-            if(e.target.id === 'modal') {
-                cerrarModal(); 
+        function cerrarModal(idModal) { 
+            let modal = document.getElementById(idModal);
+            if(modal) {
+                modal.classList.remove('active'); 
+                if(idModal === 'modal-animal') {
+                    window.speechSynthesis.cancel(); 
+                    document.getElementById('audio-animal').pause(); 
+                }
             }
         }
 
+        function checkCerrarModal(idModal, e) { if(e.target.id === idModal) cerrarModal(idModal); }
+        
+        // Motor de Voz Bilingüe
         function reproducirTTS() { 
             window.speechSynthesis.cancel(); 
             let msg = new SpeechSynthesisUtterance(document.getElementById('modal-descripcion').innerText); 
-            msg.lang = 'es-MX'; 
+            msg.lang = (idiomaActual === 'es') ? 'es-MX' : 'en-US'; 
             window.speechSynthesis.speak(msg); 
         }
+        function pausarAudio() { window.speechSynthesis.cancel(); }
+        function reproducirSonidoAnimal() { document.getElementById('audio-animal').play(); }
+        function pausarSonidoAnimal() { document.getElementById('audio-animal').pause(); }
+        function toggleAccordion(h) { h.parentElement.classList.toggle('active'); }
 
-        function pausarAudio() { 
-            window.speechSynthesis.cancel(); 
-        }
-
-        function reproducirSonidoAnimal() { 
-            document.getElementById('audio-animal').play(); 
-        }
-
-        function pausarSonidoAnimal() { 
-            document.getElementById('audio-animal').pause(); 
-        }
-
-        function toggleAccordion(h) { 
-            h.parentElement.classList.toggle('active'); 
-        }
-
-        // --- GENERACIÓN DE DATOS ---
-        window.onload = function() {
+        // --- 6. RENDERIZADO INICIAL ---
+        function renderizarTarjetas() {
             let gridFauna = document.getElementById('grid-fauna');
+            gridFauna.innerHTML = ''; 
             for(let i = 0; i < baseDatosFauna.length; i++) {
                 let f = baseDatosFauna[i];
-                let div = document.createElement('div'); 
-                div.className = 'mini-card';
-                div.innerHTML = '<div class="img-container"><img src="' + f.img + '"></div><h3>' + f.nombre + '</h3>';
-                div.onclick = function() { abrirModal(f, 0); }; 
+                let nombrePintar = (idiomaActual === 'es') ? f.nombre : f.nom_en;
+                let div = document.createElement('div'); div.className = 'mini-card';
+                div.innerHTML = '<div class="img-container"><img src="' + f.img + '"></div><h3>' + nombrePintar + '</h3>';
+                div.onclick = function() { abrirModalAnimal(f, 0); }; 
                 gridFauna.appendChild(div);
             }
 
             let gridFlora = document.getElementById('grid-flora');
+            gridFlora.innerHTML = '';
             for(let j = 0; j < baseDatosFlora.length; j++) {
                 let fl = baseDatosFlora[j];
-                let div = document.createElement('div'); 
-                div.className = 'mini-card';
-                div.innerHTML = '<div class="img-container"><img src="' + fl.img + '"></div><h3>' + fl.nombre + '</h3>';
-                div.onclick = function() { abrirModal(fl, 1); }; 
+                let nombrePintar = (idiomaActual === 'es') ? fl.nombre : fl.nom_en;
+                let div = document.createElement('div'); div.className = 'mini-card';
+                div.innerHTML = '<div class="img-container"><img src="' + fl.img + '"></div><h3>' + nombrePintar + '</h3>';
+                div.onclick = function() { abrirModalAnimal(fl, 1); }; 
                 gridFlora.appendChild(div);
             }
+        }
+
+        window.onload = function() {
+            renderizarTarjetas();
         };
     </script>
 </body>
