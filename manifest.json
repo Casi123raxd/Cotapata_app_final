@@ -1,0 +1,15 @@
+{
+  "name": "Cotapata Explora",
+  "short_name": "Cotapata",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0f7f4",
+  "theme_color": "#235030",
+  "icons": [
+    {
+      "src": "LOGOO.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
