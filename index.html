@@ -25,7 +25,7 @@
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
         .img-portada { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; opacity: 0.85; }
         
-        /* NUEVA UBICACIÓN DEL LOGO UNIVERSIDAD (Arriba Izquierda en Splash) */
+        /* LOGO UNIVERSIDAD */
         #logo-uni-splash { position: absolute; top: 20px; left: 20px; height: 50px; cursor: pointer; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
         #intro-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9998; display: none; background-color: black; }
@@ -41,9 +41,8 @@
 
         /* --- 2. CABECERA LIMPIA --- */
         header { background: var(--primary); color: white; padding: 15px; text-align: center; position: relative; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 1.3rem; padding: 0 40px; /* Espacio para el botón hamburguesa */ }
+        header h1 { margin: 0; font-size: 1.3rem; padding: 0 40px; }
         
-        /* Botón Hamburguesa Mejorado (Mayor área de toque para móviles) */
         .btn-hamburguesa { position: absolute; top: 0; right: 0; height: 100%; width: 55px; font-size: 1.8rem; background: none; border: none; color: white; cursor: pointer; z-index: 101; display: flex; justify-content: center; align-items: center; }
 
         /* --- MENÚ LATERAL (SIDEBAR) --- */
@@ -87,10 +86,13 @@
         .info-box h3 { font-size: 0.95rem; margin: 0 0 18px; font-style: italic; color: #666; font-weight: 400;}
         .info-box p { font-size: 0.9rem; line-height: 1.6; color: #333; margin-bottom: 15px; }
 
-        /* --- ACORDEONES Y EQUIPO --- */
+        /* --- ACORDEONES INTERACTIVOS (CORREGIDOS) --- */
         .accordion-item { background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; overflow: hidden; }
-        .accordion-header { padding: 15px; color: var(--primary); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        /* El header es el que recibe el clic */
+        .accordion-header { padding: 15px; color: var(--primary); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; -webkit-tap-highlight-color: transparent;}
         .accordion-content { padding: 0 15px; display: none; color: #444; font-size: 0.9rem; line-height: 1.5; }
+        
+        /* Clases activas */
         .accordion-item.active .accordion-header { background-color: #e5f2eb; border-bottom: 1px solid #eee; }
         .accordion-item.active .accordion-content { display: block; padding: 15px; }
         
@@ -114,9 +116,7 @@
 
     <div id="splash-screen">
         <img src="oso_portada.png" alt="Portada" class="img-portada">
-        
         <img id="logo-uni-splash" src="Web uni.png" alt="Universidad Salesiana" onclick="window.open('https://www.usalesiana.edu.bo/principal/es', '_blank')">
-        
         <button class="btn-comenzar" onclick="iniciarConSonido()" id="ui-btn-comenzar">🚀 Comenzar Aventura</button>
     </div>
 
@@ -208,12 +208,10 @@
         videoIntro.onended = function() { terminarVideo(); };
         function terminarVideo() { videoIntro.pause(); videoIntro.style.display = 'none'; }
 
-        // --- 2. FUNCIONES DEL MENÚ HAMBURGUESA (Optimizadas) ---
+        // --- 2. FUNCIONES DEL MENÚ HAMBURGUESA ---
         function abrirMenu() {
-            // Asegurar que no haya modales abiertos
             cerrarModal('modal-animal');
             cerrarModal('modal-extra');
-            
             document.getElementById('side-menu').classList.add('abierto');
             document.getElementById('menu-overlay').style.display = 'block';
         }
@@ -278,17 +276,17 @@
                 escuchar: "🔊 Escuchar Guía", sonidoReal: "🐾 Sonido Real",
                 guiaTitulo: "🎒 Guía de Supervivencia",
                 guiaHtml: `
-                    <div class="accordion-item active" onclick="toggleAccordion(this)">
-                        <div class="accordion-header">⚠️ Primeros Auxilios <span>▼</span></div>
-                        <div class="accordion-content"><strong>Picadura:</strong> Lave la zona. No frote.<br><br><strong>Sorojchi:</strong> Descanse, beba té de coca. Descienda si empeora.</div>
+                    <div class="accordion-item active">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Primeros Auxilios <span>▼</span></div>
+                        <div class="accordion-content"><strong>Picadura de Insecto:</strong> Lave la zona con agua y jabón. No frote. Aplique compresas frías.<br><br><strong>Mal de Altura (Sorojchi):</strong> Detenga la marcha, descanse, hidrátese (té de coca) y respire profundamente. Si no mejora, descienda inmediatamente.<br><br><strong>Esguince en Sendero:</strong> Inmovilice la zona. Aplique frío si es posible. No fuerce la marcha, pida ayuda.</div>
                     </div>
-                    <div class="accordion-item" onclick="toggleAccordion(this)">
-                        <div class="accordion-header">🐆 Seguridad <span>▼</span></div>
-                        <div class="accordion-content"><strong>Avistamiento Puma:</strong> No corra. Hágase grande. Hable fuerte.</div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">🐆 Seguridad en la Ruta <span>▼</span></div>
+                        <div class="accordion-content"><strong>Avistamiento de Puma:</strong> Mantenga la calma. No corra ni dé la espalda. Hágase ver más grande (levante brazos). Hable fuerte y firme.<br><br><strong>Extravío:</strong> Deténgase inmediatamente. Use silbato si tiene. No camine sin rumbo. Busque un lugar seguro y visible.</div>
                     </div>
-                    <div class="accordion-item" onclick="toggleAccordion(this)">
-                        <div class="accordion-header">🎒 Mochila <span>▼</span></div>
-                        <div class="accordion-content">Agua (2L), protector solar, poncho, silbato, mapa.</div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">🎒 Qué llevar en tu mochila <span>▼</span></div>
+                        <div class="accordion-content">Mínimo 2 litros de agua por persona. Protector solar y gorra. Poncho de lluvia (el clima cambia rápido). Ropa por capas (abrigo y ligera). Silbato, linterna y mapa de la ruta.</div>
                     </div>`,
                 equipoTitulo: "👥 Nuestro Equipo",
                 equipoHtml: `
@@ -314,17 +312,17 @@
                 escuchar: "🔊 Listen to Guide", sonidoReal: "🐾 Real Sound",
                 guiaTitulo: "🎒 Survival Guide",
                 guiaHtml: `
-                    <div class="accordion-item active" onclick="toggleAccordion(this)">
-                        <div class="accordion-header">⚠️ First Aid <span>▼</span></div>
-                        <div class="accordion-content"><strong>Bite:</strong> Wash area. Do not rub.<br><br><strong>Altitude Sickness:</strong> Rest, drink coca tea. Descend if it worsens.</div>
+                    <div class="accordion-item active">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">⚠️ First Aid <span>▼</span></div>
+                        <div class="accordion-content"><strong>Insect Bite:</strong> Wash area with soap and water. Do not rub. Apply cold compresses.<br><br><strong>Altitude Sickness:</strong> Stop walking, rest, hydrate (coca tea) and breathe deeply. If it doesn't improve, descend immediately.<br><br><strong>Sprain on Trail:</strong> Immobilize the area. Apply cold if possible. Do not force the walk, ask for help.</div>
                     </div>
-                    <div class="accordion-item" onclick="toggleAccordion(this)">
-                        <div class="accordion-header">🐆 Safety <span>▼</span></div>
-                        <div class="accordion-content"><strong>Cougar Sighting:</strong> Do not run. Make yourself big. Speak loudly.</div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">🐆 Trail Safety <span>▼</span></div>
+                        <div class="accordion-content"><strong>Cougar Sighting:</strong> Stay calm. Do not run or turn your back. Make yourself look bigger (raise arms). Speak loudly and firmly.<br><br><strong>Getting Lost:</strong> Stop immediately. Use a whistle if you have one. Do not walk aimlessly. Seek a safe and visible place.</div>
                     </div>
-                    <div class="accordion-item" onclick="toggleAccordion(this)">
-                        <div class="accordion-header">🎒 Backpack <span>▼</span></div>
-                        <div class="accordion-content">Water (2L), sunscreen, poncho, whistle, map.</div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">🎒 What to pack <span>▼</span></div>
+                        <div class="accordion-content">Minimum 2 liters of water per person. Sunscreen and hat. Rain poncho (weather changes quickly). Layered clothing (warm and light). Whistle, flashlight and trail map.</div>
                     </div>`,
                 equipoTitulo: "👥 Our Team",
                 equipoHtml: `
@@ -392,9 +390,7 @@
 
         // Modales
         function abrirModalAnimal(datos, esFlora) {
-            // Cerrar menú si está abierto
             cerrarMenu();
-            
             let overlay = document.getElementById('modal-animal');
             document.getElementById('modal-titulo').innerText = (idiomaActual === 'es') ? datos.nombre : datos.nom_en;
             document.getElementById('modal-cientifico').innerText = datos.cientifico;
@@ -435,6 +431,11 @@
 
         function checkCerrarModal(idModal, e) { if(e.target.id === idModal) cerrarModal(idModal); }
         
+        // ¡LA FUNCIÓN CORREGIDA DEL ACORDEÓN!
+        function toggleAccordion(h) { 
+            h.parentElement.classList.toggle('active'); 
+        }
+
         // Motor de Voz Bilingüe
         function reproducirTTS() { 
             window.speechSynthesis.cancel(); 
@@ -445,7 +446,6 @@
         function pausarAudio() { window.speechSynthesis.cancel(); }
         function reproducirSonidoAnimal() { document.getElementById('audio-animal').play(); }
         function pausarSonidoAnimal() { document.getElementById('audio-animal').pause(); }
-        function toggleAccordion(h) { h.parentElement.classList.toggle('active'); }
 
         // --- 6. RENDERIZADO INICIAL ---
         function renderizarTarjetas() {
