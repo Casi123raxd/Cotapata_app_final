@@ -25,8 +25,9 @@
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
         .img-portada { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; opacity: 0.85; }
         
-        /* LOGO UNIVERSIDAD */
-        #logo-uni-splash { position: absolute; top: 20px; left: 20px; height: 50px; cursor: pointer; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        /* LOGO UNIVERSIDAD AGRANDADO */
+        #logo-uni-splash { position: absolute; top: 25px; left: 25px; height: 85px; cursor: pointer; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); transition: transform 0.3s; }
+        #logo-uni-splash:hover { transform: scale(1.05); }
 
         #intro-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9998; display: none; background-color: black; }
 
@@ -76,23 +77,33 @@
         .mini-card img { width: 100%; height: 100%; object-fit: cover; }
         .mini-card h3 { font-size: 0.85rem; margin: 10px 0 2px; color: var(--primary); font-weight: 700; line-height: 1.2; }
 
-        /* --- 5. MODALES OPTIMIZADOS --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 3000; justify-content: center; align-items: flex-end; background-size: cover; background-position: center; background-color: rgba(0,0,0,0.85); transition: opacity 0.3s ease; }
+        /* --- 5. MODALES CORREGIDOS Y CENTRADOS --- */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; 
+            z-index: 3000; justify-content: center; align-items: center; /* CENTRADO VERTICAL Y HORIZONTAL */
+            background-size: cover; background-position: center; background-color: rgba(0,0,0,0.85); 
+            transition: opacity 0.3s ease; padding: 15px; box-sizing: border-box;
+        }
         .modal-overlay.active { display: flex; }
-        .info-box { background-color: white; width: 100%; padding: 25px 20px; border-top-left-radius: 25px; border-top-right-radius: 25px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
+        
+        .info-box { 
+            background-color: white; width: 100%; max-width: 600px; /* LÍMITE DE ANCHO PARA ESCRITORIO */
+            padding: 25px 20px; border-radius: 25px; /* BORDES REDONDEADOS COMPLETOS */
+            max-height: 85vh; overflow-y: auto; position: relative; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: auto; 
+        }
+        
         .btn-cerrar { position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; font-size: 1.2rem; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 10; }
         
         .info-box h2 { font-size: 1.35rem; margin: 0 0 5px; color: var(--primary); padding-right: 40px;}
         .info-box h3 { font-size: 0.95rem; margin: 0 0 18px; font-style: italic; color: #666; font-weight: 400;}
         .info-box p { font-size: 0.9rem; line-height: 1.6; color: #333; margin-bottom: 15px; }
 
-        /* --- ACORDEONES INTERACTIVOS (CORREGIDOS) --- */
+        /* --- ACORDEONES INTERACTIVOS --- */
         .accordion-item { background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; overflow: hidden; }
-        /* El header es el que recibe el clic */
         .accordion-header { padding: 15px; color: var(--primary); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; -webkit-tap-highlight-color: transparent;}
         .accordion-content { padding: 0 15px; display: none; color: #444; font-size: 0.9rem; line-height: 1.5; }
         
-        /* Clases activas */
         .accordion-item.active .accordion-header { background-color: #e5f2eb; border-bottom: 1px solid #eee; }
         .accordion-item.active .accordion-content { display: block; padding: 15px; }
         
@@ -180,7 +191,7 @@
     </div>
 
     <div class="modal-overlay" id="modal-extra" onclick="checkCerrarModal('modal-extra', event)">
-        <div class="info-box" style="border-radius: 25px; top: 10%;">
+        <div class="info-box">
             <button class="btn-cerrar" onclick="cerrarModal('modal-extra')">×</button>
             <h2 id="modal-extra-titulo">Título</h2>
             <div id="modal-extra-contenido" style="margin-top: 15px;"></div>
@@ -431,7 +442,6 @@
 
         function checkCerrarModal(idModal, e) { if(e.target.id === idModal) cerrarModal(idModal); }
         
-        // ¡LA FUNCIÓN CORREGIDA DEL ACORDEÓN!
         function toggleAccordion(h) { 
             h.parentElement.classList.toggle('active'); 
         }
